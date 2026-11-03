@@ -264,7 +264,7 @@
       '<span class="tag">01 · Fichaje recomendado</span>' +
       '<h3>' + esc(f.nombre) + '</h3>' +
       '<p class="role">' + esc(f.puestoNombre) + (f.asignadoAuto ? ' · asignado automáticamente' : '') + '</p>' +
-      '<p class="why">' + razonFichaje(f) + '</p>' +
+      '<p class="why">' + esc(razonFichaje(f)) + '</p>' +
       '</div><div class="cm-right">' +
       '<div class="score-row"><span class="big">' + ni(f.indice) + '<small>/100</small></span>' +
       '<span class="score-meta">índice de contratación<br>' + (D.margenIndice < 3 ? 'empate técnico con el segundo' : 'ventaja de ' + nf(D.margenIndice, 1) + ' puntos') + '</span></div>' +
