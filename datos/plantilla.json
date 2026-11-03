@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "version": "1.0",
+    "actualizado": "2026-11-03",
+    "aviso": "Plantilla de ejemplo. Reemplaza los valores por los de tu empresa."
+  },
+  "empresa": {
+    "nombre": "Mi empresa",
+    "ciudad": "",
+    "tipo": "",
+    "cultura": {
+      "rigor": 50,
+      "ritmo": 50
+    }
+  },
+  "dimensiones": [
+    {
+      "id": "tecnica",
+      "nombre": "Técnica",
+      "corto": "Técnica",
+      "desc": "Dominio técnico del oficio."
+    },
+    {
+      "id": "orden",
+      "nombre": "Orden",
+      "corto": "Orden",
+      "desc": "Método, limpieza y registro."
+    },
+    {
+      "id": "servicio",
+      "nombre": "Servicio",
+      "corto": "Servicio",
+      "desc": "Trato con cliente y equipo."
+    }
+  ],
+  "culturaEjes": [
+    {
+      "id": "rigor",
+      "nombre": "Rigor",
+      "desc": "Estándar alto y detalle."
+    },
+    {
+      "id": "ritmo",
+      "nombre": "Ritmo",
+      "desc": "Comodidad con el volumen."
+    }
+  ],
+  "dolores": [
+    {
+      "id": "dolor-1",
+      "nombre": "Mi dolor principal",
+      "desc": "Describe el problema que quieres resolver.",
+      "pesos": {
+        "tecnica": 1.2,
+        "orden": 1.1,
+        "servicio": 1
+      }
+    }
+  ],
+  "noNegociables": [
+    {
+      "id": "nn-1",
+      "nombre": "Requisito eliminatorio"
+    }
+  ],
+  "puestos": [
+    {
+      "id": "puesto-1",
+      "nombre": "Puesto 1",
+      "area": "",
+      "nivel": "",
+      "reporta": "",
+      "supervisa": "",
+      "resumen": "",
+      "mision": "",
+      "funciones": [],
+      "indicadores": [],
+      "condiciones": {
+        "jornada": "",
+        "contrato": "",
+        "banda": [
+          1000000,
+          1500000
+        ],
+        "beneficios": []
+      },
+      "requisitos": {
+        "formacion": "",
+        "experiencia": "",
+        "tecnicos": [],
+        "certificaciones": []
+      },
+      "perfil": {
+        "niveles": {
+          "tecnica": 60,
+          "orden": 60,
+          "servicio": 50
+        },
+        "formacion": "",
+        "experiencia": "",
+        "competencias": [],
+        "rasgos": [],
+        "antiPerfil": []
+      },
+      "banda": [
+        1000000,
+        1500000
+      ],
+      "vacanteDias": 0,
+      "riesgoOperativo": 50,
+      "escasez": 50
+    }
+  ],
+  "candidatos": [
+    {
+      "id": "cand-1",
+      "nombre": "Candidato 1",
+      "puestoAplicado": "puesto-1",
+      "titular": "",
+      "ciudad": "",
+      "contacto": {},
+      "resumen": "",
+      "experiencia": [],
+      "formacion": [],
+      "certificaciones": [],
+      "habilidades": {},
+      "idiomas": [],
+      "referencias": [],
+      "expectativa": 1200000,
+      "disponibilidad": {
+        "texto": "Inmediata",
+        "dias": 0
+      },
+      "vector": {
+        "tecnica": 70,
+        "orden": 65,
+        "servicio": 60
+      },
+      "cultura": {
+        "rigor": 60,
+        "ritmo": 55
+      },
+      "entrevista": {
+        "evidencia": 50,
+        "trayectoria": 50,
+        "referencias": 50,
+        "disponibilidad": 80,
+        "riesgo": 30
+      },
+      "banderas": {
+        "nn-1": true
+      },
+      "banderasNota": {},
+      "riesgos": [],
+      "notas": [],
+      "logrosClave": [],
+      "verificacion": ""
+    }
+  ],
+  "preguntas": {
+    "tecnica": [
+      "¿Pregunta de ejemplo?"
+    ]
+  },
+  "preguntasCultura": {
+    "rigor": "¿Pregunta de cultura de ejemplo?"
+  }
+}

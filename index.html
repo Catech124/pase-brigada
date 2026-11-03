@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PASE · diagnóstico de contratación</title>
+<meta name="description" content="Cruza el perfil de tus puestos con tus candidatos y ordena qué vacante cubrir primero y con quién.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <b>PASE</b>
+    <span>diagnóstico de contratación</span>
+  </div>
+  <div class="top-mid">
+    <strong id="topEmpresa">—</strong>
+    <span class="dot" aria-hidden="true"></span>
+    <span id="topMeta">—</span>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn--sm" type="button" data-export="copy" title="Copia el diagnóstico en texto">Copiar informe</button>
+    <button class="btn btn--sm" type="button" data-export="download" title="Descarga el diagnóstico en Markdown">Descargar .md</button>
+    <button class="btn btn--sm btn--ghost" type="button" data-nav="datos" title="Cargar o exportar datos">Datos</button>
+    <button class="btn btn--sm btn--ghost" type="button" data-tema="toggle" aria-label="Cambiar entre tema claro y oscuro">
+      <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.4v2.2M8 12.4v2.2M1.4 8h2.2M12.4 8h2.2M3.3 3.3l1.6 1.6M11.1 11.1l1.6 1.6M12.7 3.3l-1.6 1.6M4.9 11.1l-1.6 1.6"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="Secciones">
+    <div>
+      <p class="rail-label">Diagnóstico</p>
+      <div class="nav" id="nav">
+        <button type="button" data-nav="resumen"><span class="i">01</span><span>Resumen</span></button>
+        <button type="button" data-nav="puestos"><span class="i">02</span><span>Puestos</span></button>
+        <button type="button" data-nav="candidatos"><span class="i">03</span><span>Candidatos</span></button>
+        <button type="button" data-nav="matriz"><span class="i">04</span><span>Matriz</span></button>
+        <button type="button" data-nav="datos"><span class="i">05</span><span>Datos</span></button>
+        <button type="button" data-nav="metodo"><span class="i">06</span><span>Método</span></button>
+      </div>
+    </div>
+    <div class="rail-card" id="railResumen"></div>
+    <p class="rail-note" id="railNota">Contenido de demostración. El diagnóstico ordena la conversación; no decide por ti.</p>
+  </nav>
+
+  <main class="main">
+    <div id="vista" class="view" tabindex="-1"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/engine.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
