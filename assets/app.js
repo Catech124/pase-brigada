@@ -111,11 +111,20 @@
   }
 
   function compute() { D = M.diagnosticar(DATA, state.ctx); }
+
+  function asegurarSeleccion() {
+    if (!state.cand || !candById(state.cand)) {
+      state.cand = D && D.filas.length ? D.filas[0].id : ((DATA.candidatos || [])[0] || {}).id;
+    }
+    if (!state.puesto || !puestoById(state.puesto)) {
+      state.puesto = D && D.rankingPuestos.length ? D.rankingPuestos[0].id : ((DATA.puestos || [])[0] || {}).id;
+    }
+  }
   function guardarCtx() { guardar(LS_CTX, state.ctx); }
 
   function resetSeleccion() {
-    state.cand = (DATA.candidatos || [])[0] ? DATA.candidatos[0].id : null;
-    state.puesto = (DATA.puestos || [])[0] ? DATA.puestos[0].id : null;
+    state.cand = null;
+    state.puesto = null;
     state.matriz = null;
     state.tab = 'descripcion';
     state.ctx = ctxInicial();
@@ -612,7 +621,7 @@
     var c = candById(state.cand) || DATA.candidatos[0];
     return '<div class="hero"><div class="hero-top"><span class="folio">Candidatos · ' + DATA.candidatos.length + '</span><span class="folio">Hoja de vida y lectura</span></div>' +
       '<h1>El expediente y lo que el modelo ve en él.</h1>' +
-      '<p class="lead">Cada hoja de vida se lee junto al puesto al que aplica. El anexo interno no se comparte con el candidato.</p></div>' +
+      '<p class="lead">Cada hoja de vida se lee junto al puesto al que aplica. Las notas del proceso no forman parte del CV.</p></div>' +
       '<div class="split"><div class="list">' + D.filas.map(function (f) {
         return '<button data-cand="' + esc(f.id) + '" aria-current="' + (f.id === c.id) + '">' +
           '<b>' + esc(f.nombre) + '</b><span>' + esc(f.puestoNombre) + '</span>' +
@@ -624,7 +633,8 @@
     var f = D.porId[c.id];
     return '<div class="cand-head"><div><h2>' + esc(c.nombre) + '</h2>' +
       '<p class="role">' + esc(c.titular || '') + '</p>' +
-      '<div class="contact">' + [c.ciudad, c.contacto && c.contacto.tel, c.contacto && c.contacto.mail, c.contacto && c.contacto.linkedin]
+      (c.titulo ? '<p class="grado">' + esc(c.titulo) + '</p>' : '') +
+      '<div class="contact">' + [c.ciudad, c.contacto && c.contacto.tel, c.contacto && c.contacto.mail, c.contacto && c.contacto.linkedin, c.contacto && c.contacto.instagram]
         .filter(Boolean).map(esc).join(' · ') + '</div></div>' +
       '<div class="cand-scores">' +
       '<div class="cs"><div class="v">' + nf(f.indice, 1) + '</div><div class="l">índice</div></div>' +
@@ -666,7 +676,8 @@
     var hab = c.habilidades || {};
     return '<article class="cv"><header><h3>' + esc(c.nombre) + '</h3>' +
       '<p class="titular">' + esc(c.titular || '') + '</p>' +
-      '<div class="datos">' + [c.ciudad, c.contacto && c.contacto.tel, c.contacto && c.contacto.mail, c.contacto && c.contacto.linkedin].filter(Boolean).map(esc).join('<br>') + '</div></header>' +
+      (c.titulo ? '<p class="grado">' + esc(c.titulo) + '</p>' : '') +
+      '<div class="datos">' + [c.ciudad, c.contacto && c.contacto.tel, c.contacto && c.contacto.mail, c.contacto && c.contacto.linkedin, c.contacto && c.contacto.instagram].filter(Boolean).map(esc).join('<br>') + '</div></header>' +
       (c.resumen ? '<section><h4>Perfil profesional</h4><p>' + esc(c.resumen) + '</p></section>' : '') +
       (exp ? '<section><h4>Experiencia profesional</h4>' + exp + '</section>' : '') +
       ((form || certs) ? '<section class="two"><div><h4>Formación</h4>' + form + '</div><div><h4>Certificaciones</h4>' + certs + '</div></section>' : '') +
@@ -852,6 +863,7 @@
     state.errores = [];
     state.ok = 'Conjunto cargado: ' + obj.puestos.length + ' puestos y ' + obj.candidatos.length + ' candidatos.';
     compute();
+    asegurarSeleccion();
     render();
     toast('Datos cargados');
   }
@@ -1122,6 +1134,7 @@
     resetSeleccion();
     temaInicial();
     compute();
+    asegurarSeleccion();
     bind();
     render();
   });

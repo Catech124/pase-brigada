@@ -990,13 +990,13 @@
       "edad": 46,
       "ciudad": "Bogotá, Kennedy",
       "puestoAplicado": "steward",
-      "titular": "Auxiliar de servicio · 9 años en cocinas de hotel",
+      "titular": "Auxiliar de servicio y aseo · 9 años en hoteles y restaurantes",
       "contacto": {
-        "tel": "310 000 0001",
-        "mail": "rosa.cardenas@correo.example",
+        "tel": "312 486 9031",
+        "mail": "rosacardenas.aseo@gmail.com",
         "linkedin": ""
       },
-      "resumen": "Auxiliar de servicio con nueve años en cocinas de hotel y restaurante de alto volumen. Responsable del cierre de cocina, lavado de menaje y plan de limpieza profunda. En seis auditorías de higiene no he tenido un solo hallazgo crítico.",
+      "resumen": "Auxiliar de servicio con nueve años en cocinas de hotel y restaurante. Me encargo del cierre de cocina, del lavado de menaje y del aseo profundo de campanas y freidoras. Soy puntual, cumplo los turnos y no necesito que me estén recordando el checklist.",
       "experiencia": [
         {
           "cargo": "Steward, turno noche",
@@ -1004,9 +1004,10 @@
           "periodo": "2021 - actual",
           "contexto": "Tres restaurantes, 400 cubiertos diarios, brigada de 38 personas.",
           "logros": [
-            "Reduje el consumo de químicos un 18% cambiando la dosificación por litro y no por \"chorro\".",
-            "Seis auditorías de higiene sin hallazgos críticos, con checklist firmado por turno.",
-            "Reorganicé el cuarto de menaje con un mapa visual: la reposición en pico bajó de 11 a 4 minutos."
+            "Lavado y reposición de menaje de los tres restaurantes durante el servicio.",
+            "Cierre de cocina y limpieza profunda de campanas, freidoras y cámaras.",
+            "Cambié la dosificación de los químicos por litro: el consumo bajó como un 18%.",
+            "Seis auditorías de higiene sin hallazgos críticos."
           ]
         },
         {
@@ -1015,8 +1016,9 @@
           "periodo": "2018 - 2021",
           "contexto": "Restaurante de autor, 70 cubiertos, dos servicios.",
           "logros": [
-            "Apoyo de mise en place simple (pelado y porcionado) en el pase de almuerzo.",
-            "Cierre completo de cocina cuatro noches por semana, sin supervisión directa."
+            "Aseo de cocina y baños durante el servicio.",
+            "Apoyo en pelado y porcionado cuando el pase se ponía pesado.",
+            "Cierre de cocina cuatro noches por semana sin supervisión."
           ]
         },
         {
@@ -1025,7 +1027,7 @@
           "periodo": "2016 - 2018",
           "contexto": "Producción de 600 a 900 porciones diarias.",
           "logros": [
-            "Lavado industrial de menaje y apoyo en línea de empaque."
+            "Lavado industrial de menaje y apoyo en la línea de empaque."
           ]
         }
       ],
@@ -1054,35 +1056,22 @@
       "habilidades": {
         "tecnicas": [
           "Lavado industrial de menaje",
-          "Limpieza profunda de campanas y freidoras",
+          "Limpieza de campanas y freidoras",
           "Manejo de químicos con ficha de seguridad",
           "FIFO y rotulación"
         ],
         "gestion": [
           "Cierre de cocina",
-          "Control de inventario de aseo",
-          "Reporte de averías"
+          "Inventario de aseo"
         ],
         "herramientas": [
-          "Checklist físico",
-          "WhatsApp para reportes"
+          "Checklist físico"
         ]
       },
       "idiomas": [
         "Español nativo"
       ],
-      "referencias": [
-        {
-          "nombre": "Marta Peña",
-          "cargo": "Gobernanta, Hotel Tequendama",
-          "nota": "Verificable"
-        },
-        {
-          "nombre": "Julián Rojas",
-          "cargo": "Chef, Salvo Patria",
-          "nota": "Verificable"
-        }
-      ],
+      "referencias": [],
       "expectativa": 1750000,
       "disponibilidad": {
         "texto": "Inmediata",
@@ -1142,7 +1131,8 @@
         "0 hallazgos en 6 auditorías",
         "Reposición 11 min → 4 min"
       ],
-      "verificacion": "Pedir el checklist firmado del último mes y el mapa del cuarto de menaje que dice haber hecho."
+      "verificacion": "Pedir el checklist firmado del último mes y el mapa del cuarto de menaje que dice haber hecho.",
+      "titulo": "Bachiller"
     },
     {
       "id": "jhon",
@@ -1150,13 +1140,13 @@
       "edad": 29,
       "ciudad": "Soacha, Cundinamarca",
       "puestoAplicado": "cocinero-b",
-      "titular": "Cocinero de línea · parrilla y producción",
+      "titular": "Cocinero de parrilla y producción · 6 años",
       "contacto": {
-        "tel": "310 000 0002",
-        "mail": "jhon.mosquera@correo.example",
+        "tel": "310 336 7712",
+        "mail": "jhonmosquera29@gmail.com",
         "linkedin": ""
       },
-      "resumen": "Cocinero de línea con seis años en parrilla y producción para eventos. Rápido, resistente y con buen punto de carne. Busco una cocina donde pueda crecer a jefe de partida y aprender salsas.",
+      "resumen": "Cocinero con seis años en parrilla y producción para eventos. Trabajo rápido en el pico y mantengo el punto de la carne. Busco un puesto fijo en una cocina donde pueda aprender salsas y crecer a jefe de partida.",
       "experiencia": [
         {
           "cargo": "Cocinero B, parrilla",
@@ -1164,9 +1154,10 @@
           "periodo": "2022 - actual",
           "contexto": "Cocina a la carta, 180 cubiertos, brigada de 16.",
           "logros": [
-            "Bajé el tiempo de pase de la parrilla de 14 a 9 minutos en el pico del sábado.",
-            "Reduje la merma de carnes de 6,1% a 4,3% con porcionado previo y registro diario.",
-            "Entrené a dos auxiliares nuevos en el manejo de la parrilla."
+            "Parrilla a la carta: carnes, pollo y pescado.",
+            "Mise en place de la partida y control de temperaturas.",
+            "El tiempo de pase de la parrilla bajó de 14 a 9 minutos en el sábado.",
+            "Registro diario de merma; la merma de carnes quedó alrededor del 4%."
           ]
         },
         {
@@ -1175,17 +1166,18 @@
           "periodo": "2019 - 2022",
           "contexto": "Eventos de 200 a 600 personas, cocina central.",
           "logros": [
-            "Producción en lote de proteínas y guarniciones para 24 eventos por mes.",
-            "Cero quejas de temperatura en 14 meses."
+            "Producción en lote de proteínas y guarniciones para 24 eventos al mes.",
+            "Empaque y despacho de producto terminado."
           ]
         },
         {
           "cargo": "Auxiliar de panadería",
           "empresa": "Panadería El Trigal",
           "periodo": "2018 - 2019",
-          "contexto": "Panadería de barrio, producción de madrugada.",
+          "contexto": "Panadería de barrio, producción de madrugada. Contrato temporal.",
           "logros": [
-            "Armado y horneado de panes de vitrina."
+            "Armado y horneado de panes de vitrina.",
+            "Aseo de la zona de hornos al final del turno."
           ]
         }
       ],
@@ -1224,18 +1216,19 @@
         ]
       },
       "idiomas": [
-        "Español nativo"
+        "Español nativo",
+        "Inglés básico (A1)"
       ],
       "referencias": [
         {
           "nombre": "Óscar Medina",
           "cargo": "Chef, Casa Vieja",
-          "nota": "Verificable"
+          "nota": "Tel. 320 451 7788"
         },
         {
           "nombre": "Diana Cruz",
           "cargo": "Coordinadora, Bogotá Eventos",
-          "nota": "Verificable"
+          "nota": "Tel. 311 672 4095"
         }
       ],
       "expectativa": 2400000,
@@ -1297,7 +1290,8 @@
         "Merma de carnes 6,1% → 4,3%",
         "24 eventos/mes sin quejas"
       ],
-      "verificacion": "Prueba de punto de carne a ciegas y revisar el registro de merma de la última semana, no el discurso."
+      "verificacion": "Prueba de punto de carne a ciegas y revisar el registro de merma de la última semana, no el discurso.",
+      "titulo": "Técnico en Cocina"
     },
     {
       "id": "camila",
@@ -1307,11 +1301,11 @@
       "puestoAplicado": "cocinero-a",
       "titular": "Jefa de partida · cocina de autor",
       "contacto": {
-        "tel": "310 000 0003",
-        "mail": "camila.restrepo@correo.example",
-        "linkedin": "linkedin.com/in/camila-restrepo-demo"
+        "tel": "301 274 5589",
+        "mail": "camila.restrepo.cocina@gmail.com",
+        "linkedin": "linkedin.com/in/camila-restrepo"
       },
-      "resumen": "Jefa de partida con ocho años en cocinas de autor y una etapa de investigación en Lima. Dueña de salsas y pescados en una brigada de catorce. Me interesa una cocina con identidad de producto y un equipo al que pueda enseñar.",
+      "resumen": "Jefa de partida con ocho años en cocinas de autor. He llevado salsas y pescados en una brigada de catorce y participé en una pasantía de investigación en Lima. Me interesa una cocina con identidad de producto y un equipo al que pueda enseñar.",
       "experiencia": [
         {
           "cargo": "Jefa de partida, salsas y pescados",
@@ -1319,9 +1313,11 @@
           "periodo": "2021 - actual",
           "contexto": "Cocina de autor, 90 cubiertos, menú degustación de nueve pasos, brigada de 14.",
           "logros": [
-            "Food cost de mi partida en 31,4%, frente al 34% del restaurante.",
-            "Siete platos desarrollados por mí siguen en carta después de dos temporadas.",
-            "Formé a cuatro auxiliares; dos fueron promovidos a cocinero B."
+            "Salsas, pescados y mariscos durante el servicio.",
+            "Desarrollo de platos de temporada con el chef.",
+            "Siete platos que desarrollé siguen en carta después de dos temporadas.",
+            "Food cost de la partida en 31,4%, frente al 34% del restaurante.",
+            "Formación de cuatro auxiliares; dos pasaron a cocinero B."
           ]
         },
         {
@@ -1331,7 +1327,7 @@
           "contexto": "Restaurante de mercado, 60 cubiertos, carta cambiante.",
           "logros": [
             "Responsable de la partida de verduras y fermentaciones.",
-            "Implementé el registro de merma por partida que hoy usa toda la cocina."
+            "Registro de merma por partida."
           ]
         },
         {
@@ -1347,9 +1343,9 @@
           "cargo": "Pasantía de investigación y desarrollo",
           "empresa": "Cocina de investigación, Lima",
           "periodo": "2018 (4 meses)",
-          "contexto": "Proyecto de productos nativos y técnicas de conservación.",
+          "contexto": "Productos nativos y técnicas de conservación.",
           "logros": [
-            "Documenté 22 fichas de producto y tres técnicas de fermentación."
+            "Fichas de producto y apoyo en pruebas de fermentación."
           ]
         }
       ],
@@ -1397,12 +1393,12 @@
         {
           "nombre": "Santiago Vera",
           "cargo": "Chef ejecutivo, El Chato",
-          "nota": "Verificable"
+          "nota": "Contacto disponible"
         },
         {
           "nombre": "Paula Duque",
           "cargo": "Chef propietaria, Raus",
-          "nota": "Verificable"
+          "nota": "Contacto disponible"
         }
       ],
       "expectativa": 4600000,
@@ -1468,7 +1464,8 @@
         "7 platos en carta 2 temporadas",
         "2 de 4 auxiliares promovidos"
       ],
-      "verificacion": "Pedir el escandallo de dos de sus siete platos y el último inventario de su partida."
+      "verificacion": "Pedir el escandallo de dos de sus siete platos y el último inventario de su partida.",
+      "titulo": "Profesional en Gastronomía"
     },
     {
       "id": "andres",
@@ -1476,13 +1473,13 @@
       "edad": 38,
       "ciudad": "Bogotá, Chapinero",
       "puestoAplicado": "asistente-admin",
-      "titular": "Administración de A&B · 11 años en restaurantes",
+      "titular": "Administración de A&B · costos y compras",
       "contacto": {
-        "tel": "310 000 0004",
-        "mail": "andres.ospina@correo.example",
-        "linkedin": "linkedin.com/in/afospina-demo"
+        "tel": "315 608 4421",
+        "mail": "andres.ospina.a@gmail.com",
+        "linkedin": "linkedin.com/in/afospina"
       },
-      "resumen": "Administrador de alimentos y bebidas con once años en operaciones de 80 a 400 cubiertos. He bajado el food cost de 38% a 31% en dos restaurantes y montado inventario cíclico donde antes había conteo trimestral. Sé leer una cocina desde el inventario y desde la línea.",
+      "resumen": "Administrador de alimentos y bebidas con once años en restaurantes de 80 a 400 cubiertos. He trabajado en costos, inventarios y compras, y también he estado en línea cuando ha hecho falta. Busco una operación donde los números y la cocina estén en la misma mesa.",
       "experiencia": [
         {
           "cargo": "Asistente de Chef Ejecutivo (administrativo)",
@@ -1490,9 +1487,11 @@
           "periodo": "2020 - actual",
           "contexto": "210 empleados, 480 cubiertos diarios, tres marcas.",
           "logros": [
-            "Food cost consolidado de 34,8% a 31,2% en 18 meses.",
-            "Merma de 7,9% a 4,1% con conteo cíclico semanal y control por familia.",
-            "Disputas de facturas con proveedores reducidas 62%; horas extra de cocina, 14%."
+            "Escandallos y actualización de precios de las tres cartas.",
+            "Inventario semanal y conteo cíclico por familias.",
+            "Food cost consolidado de 34,8% a 31,2% en año y medio.",
+            "Conciliación de facturas; las disputas bajaron cerca del 60%.",
+            "Programación de turnos y control de horas extra."
           ]
         },
         {
@@ -1501,8 +1500,9 @@
           "periodo": "2015 - 2020",
           "contexto": "Restaurante de hotel, 120 cubiertos, banquetería.",
           "logros": [
-            "Implementé escandallos para el 100% de la carta y formación al equipo de cocina.",
-            "Margen bruto de bebidas de 58% a 64%."
+            "Costos de alimentos y bebidas, compras y presupuesto.",
+            "Escandallos del 100% de la carta.",
+            "Margen de bebidas de 58% a 64%."
           ]
         },
         {
@@ -1558,8 +1558,7 @@
         "herramientas": [
           "Excel avanzado",
           "Power BI",
-          "Sistema de inventarios",
-          "Google Sheets"
+          "Sistema de inventarios"
         ]
       },
       "idiomas": [
@@ -1570,12 +1569,12 @@
         {
           "nombre": "Mauricio Londoño",
           "cargo": "Chef corporativo, Grupo Rasa",
-          "nota": "Verificable"
+          "nota": "Contacto disponible"
         },
         {
           "nombre": "Clara Benavides",
-          "cargo": "Gerente de operaciones, Restaurante Índigo",
-          "nota": "Verificable"
+          "cargo": "Gerente de operaciones, Índigo",
+          "nota": "Contacto disponible"
         }
       ],
       "expectativa": 5200000,
@@ -1635,7 +1634,8 @@
         "Merma 7,9% → 4,1%",
         "Disputas de facturas -62%"
       ],
-      "verificacion": "Pedir el último reporte de food cost real vs teórico y preguntar qué decisión tomó con él."
+      "verificacion": "Pedir el último reporte de food cost real vs teórico y preguntar qué decisión tomó con él.",
+      "titulo": "Administrador de Empresas Turísticas y Hoteleras"
     },
     {
       "id": "lucia",
@@ -1643,13 +1643,14 @@
       "edad": 31,
       "ciudad": "Bogotá, Usaquén",
       "puestoAplicado": "pastelero",
-      "titular": "Pastelera de autor · 7 años en restaurante",
+      "titular": "Pastelera · repostería de restaurante",
       "contacto": {
-        "tel": "310 000 0005",
-        "mail": "lucia.beltran@correo.example",
-        "linkedin": "linkedin.com/in/lucia-beltran-demo"
+        "tel": "318 495 2206",
+        "mail": "lucia.beltran.postres@gmail.com",
+        "linkedin": "",
+        "instagram": "@beltranpostres"
       },
-      "resumen": "Pastelera con siete años en repostería de restaurante y una marca propia de postres por encargo. Trabajo con producto de temporada y recetas estandarizadas. Busco un proyecto estable para desarrollar la carta de postres completa.",
+      "resumen": "Pastelera con siete años en repostería de restaurante y una marca propia de postres por encargo. Trabajo con producto de temporada y recetas pesadas. Busco un proyecto estable para desarrollar la carta de postres completa.",
       "experiencia": [
         {
           "cargo": "Pastelera",
@@ -1657,9 +1658,10 @@
           "periodo": "2021 - actual",
           "contexto": "70 cubiertos, carta de seis postres y eventos privados.",
           "logros": [
-            "Margen de postres de 68% a 74%; merma de 8% a 4,6%.",
-            "Tres postres se mantuvieron en carta dos años seguidos.",
-            "Monté la producción de 40 eventos al año sin ampliar el equipo."
+            "Producción diaria de la carta de postres y pedidos de eventos.",
+            "Costeo de recetas y control de merma.",
+            "El margen de postres pasó de 68% a 74%.",
+            "Tres postres se mantuvieron en carta dos años seguidos."
           ]
         },
         {
@@ -1668,8 +1670,9 @@
           "periodo": "2019 - 2021",
           "contexto": "Pedidos por encargo, 30 pedidos mensuales, venta directa.",
           "logros": [
-            "Desarrollé catálogo de 18 productos con costeo unitario.",
-            "Cerré la operación en pandemia con inventario liquidado."
+            "Catálogo de 18 productos y costeo unitario.",
+            "Atención de pedidos, empaque y entrega.",
+            "Cerré la operación en la pandemia."
           ]
         },
         {
@@ -1678,7 +1681,7 @@
           "periodo": "2017 - 2019",
           "contexto": "Pastelería de hotel, buffet y eventos.",
           "logros": [
-            "Producción diaria de buffet y montaje de mesas dulces."
+            "Producción de buffet y montaje de mesas dulces."
           ]
         }
       ],
@@ -1698,10 +1701,6 @@
         {
           "nombre": "Manipulación de alimentos",
           "estado": "Vigente hasta 11/2027"
-        },
-        {
-          "nombre": "Chocolate y entremets",
-          "estado": "2022"
         }
       ],
       "habilidades": {
@@ -1730,12 +1729,12 @@
         {
           "nombre": "Daniel Arango",
           "cargo": "Chef ejecutivo, Domingo",
-          "nota": "Verificable"
+          "nota": "Contacto disponible"
         },
         {
           "nombre": "Ana María Gil",
-          "cargo": "Cliente de eventos, 40 pedidos al año",
-          "nota": "Verificable"
+          "cargo": "Cliente de eventos",
+          "nota": "Contacto disponible"
         }
       ],
       "expectativa": 3900000,
@@ -1801,7 +1800,8 @@
         "Merma 8% → 4,6%",
         "40 eventos/año sin ampliar equipo"
       ],
-      "verificacion": "Prueba de 40 postres en tres horas, no un postre de autor. Medir tiempo real y merma."
+      "verificacion": "Prueba de 40 postres en tres horas, no un postre de autor. Medir tiempo real y merma.",
+      "titulo": "Técnica en Panadería y Pastelería"
     }
   ],
   "preguntas": {

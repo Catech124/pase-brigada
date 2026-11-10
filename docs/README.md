@@ -18,13 +18,13 @@ diagnóstico de contratación.
 
 ## Hojas de vida
 
-| # | Candidato | Aplica a | Expectativa | Disponibilidad |
-| ---: | --- | --- | --- | --- |
-| 01 | [Rosa Elvira Cárdenas](curriculos/01-rosa-elvira-cardenas.md) | Steward | $1.750.000 | Inmediata |
-| 02 | [Jhon Fredy Mosquera](curriculos/02-jhon-fredy-mosquera.md) | Cocinero B | $2.400.000 | 15 días |
-| 03 | [Camila Restrepo](curriculos/03-camila-restrepo.md) | Cocinero A | $4.600.000 | 30 días (preaviso) |
-| 04 | [Andrés Felipe Ospina](curriculos/04-andres-felipe-ospina.md) | Asistente de Chef Ejecutivo (administrativo) | $5.200.000 | 45 días (preaviso) |
-| 05 | [Lucía Fernanda Beltrán](curriculos/05-lucia-fernanda-beltran.md) | Pastelero | $3.900.000 | 15 días |
+| # | Candidato | Título | Aplica a | Expectativa | Disponibilidad |
+| ---: | --- | --- | --- | --- | --- |
+| 01 | [Rosa Elvira Cárdenas](curriculos/01-rosa-elvira-cardenas.md) | Bachiller | Steward | $1.750.000 | Inmediata |
+| 02 | [Jhon Fredy Mosquera](curriculos/02-jhon-fredy-mosquera.md) | Técnico en Cocina | Cocinero B | $2.400.000 | 15 días |
+| 03 | [Camila Restrepo](curriculos/03-camila-restrepo.md) | Profesional en Gastronomía | Cocinero A | $4.600.000 | 30 días (preaviso) |
+| 04 | [Andrés Felipe Ospina](curriculos/04-andres-felipe-ospina.md) | Administrador de Empresas Turísticas y Hoteleras | Asistente de Chef Ejecutivo (administrativo) | $5.200.000 | 45 días (preaviso) |
+| 05 | [Lucía Fernanda Beltrán](curriculos/05-lucia-fernanda-beltran.md) | Técnica en Panadería y Pastelería | Pastelero | $3.900.000 | 15 días |
 
 ## Cómo leer estos documentos
 
@@ -33,9 +33,8 @@ diagnóstico de contratación.
 - **Perfil del puesto**: cómo es la persona que necesitamos. Competencias con
   nivel mínimo, formación, rasgos y anti-perfil. Es el documento que usa quien
   entrevista, no se publica.
-- **Hoja de vida**: el expediente del candidato. Al final lleva un anexo del
-  proceso con los logros a verificar y los riesgos detectados; ese anexo no se
-  comparte con el candidato.
+- **Hoja de vida**: el documento que se envía. Una página, sin anexos internos.
+  Las notas del proceso y los riesgos viven en la aplicación, no en el CV.
 
 ## Resumen del contexto
 
@@ -48,6 +47,4 @@ diagnóstico de contratación.
 ## Documentos de apoyo
 
 - [Matriz comparativa de perfiles](matriz-perfiles.md): las cinco fichas en una sola tabla.
-- [Documento completo](completo.md): todo el material en un archivo de texto.
-- [Dossier PDF](dossier-brigada.pdf): un documento por página y cada hoja de vida en una sola página, 32 páginas.
-- [Dossier compacto](dossier-compacto.pdf): versión corrida para leer de seguido, 27 páginas.
+- **Hojas de vida en PDF**: una por persona, en la carpeta curriculos/ del proyecto.

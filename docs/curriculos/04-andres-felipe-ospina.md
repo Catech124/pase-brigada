@@ -1,14 +1,14 @@
 # Andrés Felipe Ospina
 
-**Administración de A&B · 11 años en restaurantes**
+**Administración de A&B · costos y compras**
 
-Bogotá, Chapinero · 310 000 0004 · andres.ospina@correo.example · linkedin.com/in/afospina-demo
+Administrador de Empresas Turísticas y Hoteleras · Bogotá, Chapinero · 315 608 4421 · andres.ospina.a@gmail.com · linkedin.com/in/afospina
 
 ---
 
 ## Perfil profesional
 
-Administrador de alimentos y bebidas con once años en operaciones de 80 a 400 cubiertos. He bajado el food cost de 38% a 31% en dos restaurantes y montado inventario cíclico donde antes había conteo trimestral. Sé leer una cocina desde el inventario y desde la línea.
+Administrador de alimentos y bebidas con once años en restaurantes de 80 a 400 cubiertos. He trabajado en costos, inventarios y compras, y también he estado en línea cuando ha hecho falta. Busco una operación donde los números y la cocina estén en la misma mesa.
 
 ## Experiencia profesional
 
@@ -18,9 +18,11 @@ Administrador de alimentos y bebidas con once años en operaciones de 80 a 400 c
 
 *210 empleados, 480 cubiertos diarios, tres marcas.*
 
-- Food cost consolidado de 34,8% a 31,2% en 18 meses.
-- Merma de 7,9% a 4,1% con conteo cíclico semanal y control por familia.
-- Disputas de facturas con proveedores reducidas 62%; horas extra de cocina, 14%.
+- Escandallos y actualización de precios de las tres cartas.
+- Inventario semanal y conteo cíclico por familias.
+- Food cost consolidado de 34,8% a 31,2% en año y medio.
+- Conciliación de facturas; las disputas bajaron cerca del 60%.
+- Programación de turnos y control de horas extra.
 
 ### Administrador de A&B
 
@@ -28,8 +30,9 @@ Administrador de alimentos y bebidas con once años en operaciones de 80 a 400 c
 
 *Restaurante de hotel, 120 cubiertos, banquetería.*
 
-- Implementé escandallos para el 100% de la carta y formación al equipo de cocina.
-- Margen bruto de bebidas de 58% a 64%.
+- Costos de alimentos y bebidas, compras y presupuesto.
+- Escandallos del 100% de la carta.
+- Margen de bebidas de 58% a 64%.
 
 ### Analista de costos y compras
 
@@ -56,7 +59,7 @@ Administrador de alimentos y bebidas con once años en operaciones de 80 a 400 c
 
 - **Técnicas:** Escandallos · inventario cíclico · conciliación de facturas · compras y negociación · programación de turnos.
 - **Gestión:** Food cost real vs teórico · presupuesto · nómina de cocina · documentación HACCP.
-- **Herramientas:** Excel avanzado · Power BI · sistema de inventarios · Google Sheets.
+- **Herramientas:** Excel avanzado · Power BI · sistema de inventarios.
 
 ## Idiomas
 
@@ -64,8 +67,8 @@ Español nativo · Inglés B1
 
 ## Referencias
 
-- **Mauricio Londoño** · Chef corporativo, Grupo Rasa · Verificable
-- **Clara Benavides** · Gerente de operaciones, Restaurante Índigo · Verificable
+- **Mauricio Londoño** · Chef corporativo, Grupo Rasa · Contacto disponible
+- **Clara Benavides** · Gerente de operaciones, Índigo · Contacto disponible
 
 ## Condiciones
 
@@ -74,28 +77,3 @@ Español nativo · Inglés B1
 | Cargo al que aplica | Asistente de Chef Ejecutivo (administrativo) |
 | Expectativa salarial | $5.200.000 mensuales |
 | Disponibilidad | 45 días (preaviso) |
-
----
-
-## Anexo del proceso (no forma parte de la hoja de vida)
-
-**Logros que se deben verificar en la entrevista**
-- Food cost 34,8% → 31,2%
-- Merma 7,9% → 4,1%
-- Disputas de facturas -62%
-
-**Riesgos detectados en el papel**
-- *oficio:* No cocina en línea desde 2019: puede perder autoridad frente a la brigada.
-- *encaje:* Viene de grupo grande con equipo de apoyo; aquí estará solo.
-
-**Notas para el reclutador**
-- Pedir el último reporte de food cost que haya hecho y preguntarle qué decisión tomó con él.
-- Verificar cómo maneja la relación con el chef cuando los números contradicen su intuición.
-
-**Verificación concreta**
-- Pedir el último reporte de food cost real vs teórico y preguntar qué decisión tomó con él.
-
-**Lectura del modelo frente al puesto**
-- Encaje: 98,1 de 100. Cultura: 86,1. Entrevista: 84,8.
-- Brechas: Creatividad e I+D (30 de 35); Ritmo y volumen (58 de 60); Mando de brigada (68 de 70).
-- Salario frente a banda: dentro de banda.

@@ -33,6 +33,23 @@ cultura y requisitos eliminatorios) se cambia en vivo y todo se recalcula.
 Los datos se guardan en `localStorage` del navegador. No hay servidor ni base de
 datos: nada se envía a internet.
 
+## Currículas de ejemplo
+
+Cinco hojas de vida en PDF, una por persona y de una página, en `curriculos/`.
+Están escritas como CV reales: tareas además de logros, cifras aproximadas,
+referencias dispares y algún trabajo corto. No son casos de estudio.
+
+| # | Currícula | Título |
+| ---: | --- | --- |
+| 01 | `CV-01-Rosa-Elvira-Cardenas.pdf` | Bachiller |
+| 02 | `CV-02-Jhon-Fredy-Mosquera.pdf` | Técnico en Cocina |
+| 03 | `CV-03-Camila-Restrepo.pdf` | Profesional en Gastronomía |
+| 04 | `CV-04-Andres-Felipe-Ospina.pdf` | Administrador de Empresas Turísticas y Hoteleras |
+| 05 | `CV-05-Lucia-Fernanda-Beltran.pdf` | Técnica en Panadería y Pastelería |
+
+Las versiones editables están en `docs/curriculos/` y los datos de origen en
+`assets/data.js`.
+
 ## Cargar tus puestos
 
 El archivo mínimo está en [`datos/plantilla.json`](datos/plantilla.json) y el
@@ -95,7 +112,11 @@ pesos vigentes y las fórmulas completas.
 ├── datos/
 │   ├── ejemplo.json        el conjunto de ejemplo exportado
 │   └── plantilla.json      esqueleto mínimo para editar
-├── docs/                   documentos de ejemplo (descripciones, perfiles, CV, PDF)
+├── curriculos/             las 5 hojas de vida en PDF (una página cada una)
+├── docs/                   descripciones, perfiles y CV editables
+│   ├── puestos/            descripciones de puesto
+│   ├── perfiles/           perfiles de competencias
+│   └── curriculos/         hojas de vida en Markdown
 ├── test-engine.cjs         pruebas del motor (node)
 └── test-ui.cjs             pruebas de interfaz (Brave headless por CDP)
 ```
@@ -105,8 +126,8 @@ pesos vigentes y las fórmulas completas.
 ```bash
 node test-engine.cjs        # ranking, validación, genericidad
 node test-ui.cjs            # navega todas las vistas, captura en shots/ y reporta errores de consola
-node build-docs.cjs         # regenera los documentos de ejemplo
-node build-pdf.cjs          # dossier PDF de ejemplo
+node build-docs.cjs         # regenera descripciones, perfiles y CV en Markdown
+node build-cv-pdf.cjs       # regenera las 5 currículas en PDF
 ```
 
 No hay dependencias de npm. La aplicación funciona abriendo `index.html` con

@@ -12,7 +12,7 @@ vm.runInContext(fs.readFileSync(path.join(__dirname, 'assets/data.js'), 'utf8'),
 const DATA = sandbox.window.BRIGADA;
 const MOTOR = require('./assets/engine.js');
 
-const DIMS = MOTOR.DIMS;
+const DIMS = (DATA.dimensiones || []).map((d) => d.id);
 const dimName = (id) => DATA.dimensiones.find((d) => d.id === id).nombre;
 const cultName = (id) => DATA.culturaEjes.find((c) => c.id === id).nombre;
 
@@ -43,7 +43,7 @@ const CANDIDATOS = DATA.candidatos.map((c, i) => {
   return { ...c, num: String(i + 1).padStart(2, '0'), file: slug(c.nombre), puesto: p };
 });
 
-const D = MOTOR.diagnosticar(DATA, {});
+const D = MOTOR.diagnosticar(DATA, { noNegociables: (DATA.noNegociables || []).slice(0, 1).map((n) => n.id) });
 const filaDe = (id) => D.porId[id];
 
 /* ------------------------------ descripción ------------------------------ */
@@ -213,14 +213,17 @@ ${e.logros.map((l) => `- ${l}`).join('\n')}
 
   const form = c.formacion.map((f) => `| ${f.anio} | ${f.titulo} | ${f.institucion} |`).join('\n');
   const certs = c.certificaciones.map((x) => `- ${x.nombre}: ${x.estado}`).join('\n');
-  const refs = c.referencias.map((r) => `- **${r.nombre}** · ${r.cargo} · ${r.nota}`).join('\n');
-  const f = filaDe(c.id);
+  const refs = c.referencias.length
+    ? c.referencias.map((r) => `- **${r.nombre}** · ${r.cargo} · ${r.nota}`).join('\n')
+    : 'Disponibles a solicitud.';
+  const contacto = [c.titulo, c.ciudad, c.contacto.tel, c.contacto.mail, c.contacto.linkedin, c.contacto.instagram]
+    .filter(Boolean).join(' · ');
 
   return `# ${c.nombre}
 
 **${c.titular}**
 
-${c.ciudad} · ${c.contacto.tel} · ${c.contacto.mail}${c.contacto.linkedin ? ' · ' + c.contacto.linkedin : ''}
+${contacto}
 
 ---
 
@@ -262,27 +265,6 @@ ${refs}
 | Cargo al que aplica | ${c.puesto.nombre} |
 | Expectativa salarial | ${money(c.expectativa)} mensuales |
 | Disponibilidad | ${c.disponibilidad.texto} |
-
----
-
-## Anexo del proceso (no forma parte de la hoja de vida)
-
-**Logros que se deben verificar en la entrevista**
-${c.logrosClave.map((x) => `- ${x}`).join('\n')}
-
-**Riesgos detectados en el papel**
-${c.riesgos.map((r) => `- *${r.tipo}:* ${r.texto}`).join('\n')}
-
-**Notas para el reclutador**
-${c.notas.map((x) => `- ${x}`).join('\n')}
-
-**Verificación concreta**
-- ${c.verificacion}
-
-**Lectura del modelo frente al puesto**
-- Encaje: ${nf(f.fit)} de 100. Cultura: ${nf(f.cultura)}. Entrevista: ${nf(f.prioridad)}.
-- Brechas: ${f.gaps.length ? f.gaps.map((g) => `${dimName(g.dim)} (${g.have} de ${g.req})`).join('; ') : 'ninguna frente al perfil'}.
-- Salario frente a banda: ${f.salario.exceso > 0 ? `${nf(f.salario.exceso)}% por encima del tope` : 'dentro de banda'}.
 `;
 }
 
@@ -295,7 +277,7 @@ function indice() {
   }).join('\n');
 
   const cvs = CANDIDATOS.map(
-    (c) => `| ${c.num} | [${c.nombre}](curriculos/${c.num}-${c.file}.md) | ${c.puesto.nombre} | ${money(c.expectativa)} | ${c.disponibilidad.texto} |`
+    (c) => `| ${c.num} | [${c.nombre}](curriculos/${c.num}-${c.file}.md) | ${c.titulo || ''} | ${c.puesto.nombre} | ${money(c.expectativa)} | ${c.disponibilidad.texto} |`
   ).join('\n');
 
   return `# Brigada de cocina · documentos de selección
@@ -314,8 +296,8 @@ ${filas}
 
 ## Hojas de vida
 
-| # | Candidato | Aplica a | Expectativa | Disponibilidad |
-| ---: | --- | --- | --- | --- |
+| # | Candidato | Título | Aplica a | Expectativa | Disponibilidad |
+| ---: | --- | --- | --- | --- | --- |
 ${cvs}
 
 ## Cómo leer estos documentos
@@ -325,9 +307,8 @@ ${cvs}
 - **Perfil del puesto**: cómo es la persona que necesitamos. Competencias con
   nivel mínimo, formación, rasgos y anti-perfil. Es el documento que usa quien
   entrevista, no se publica.
-- **Hoja de vida**: el expediente del candidato. Al final lleva un anexo del
-  proceso con los logros a verificar y los riesgos detectados; ese anexo no se
-  comparte con el candidato.
+- **Hoja de vida**: el documento que se envía. Una página, sin anexos internos.
+  Las notas del proceso y los riesgos viven en la aplicación, no en el CV.
 
 ## Resumen del contexto
 
@@ -340,9 +321,7 @@ ${cvs}
 ## Documentos de apoyo
 
 - [Matriz comparativa de perfiles](matriz-perfiles.md): las cinco fichas en una sola tabla.
-- [Documento completo](completo.md): todo el material en un archivo de texto.
-- [Dossier PDF](dossier-brigada.pdf): un documento por página y cada hoja de vida en una sola página, 32 páginas.
-- [Dossier compacto](dossier-compacto.pdf): versión corrida para leer de seguido, 27 páginas.
+- **Hojas de vida en PDF**: una por persona, en la carpeta curriculos/ del proyecto.
 `;
 }
 
@@ -410,31 +389,6 @@ CANDIDATOS.forEach((c) => {
 fs.writeFileSync(path.join(OUT, 'README.md'), indice(), 'utf8');
 fs.writeFileSync(path.join(OUT, 'matriz-perfiles.md'), matriz(), 'utf8');
 
-const portada = `# Brigada de cocina · documentos de selección
-
-**Casa Mirador** · Bogotá · ${fecha}
-
-> Cinco puestos, cinco perfiles y cinco hojas de vida para una brigada de 12 personas.
-> Material de demostración: empresa, personas y cifras son ficticias.
-
-## Cómo leer
-
-La **descripción** responde qué hace el puesto. El **perfil** responde cómo es la persona
-que lo puede hacer. La **hoja de vida** trae el expediente y, al final, un anexo interno
-del proceso con los logros a verificar y los riesgos detectados.
-
-<!-- TOC -->
-
----
-
-`;
-const completo = [
-  portada,
-  ...PUESTOS.flatMap((p) => [descripcion(p), '\n---\n', perfil(p), '\n---\n']),
-  ...CANDIDATOS.flatMap((c) => [cv(c), '\n---\n'])
-].join('\n');
-fs.writeFileSync(path.join(OUT, 'completo.md'), completo, 'utf8');
-
 console.log('Documentos generados en docs/');
-escritos.concat([path.join(OUT, 'README.md'), path.join(OUT, 'matriz-perfiles.md'), path.join(OUT, 'completo.md')])
+escritos.concat([path.join(OUT, 'README.md'), path.join(OUT, 'matriz-perfiles.md')])
   .forEach((f) => console.log('  ' + path.relative(OUT, f) + ' · ' + fs.statSync(f).size + ' bytes'));
