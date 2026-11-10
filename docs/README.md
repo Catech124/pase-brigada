@@ -2,7 +2,7 @@
 
 **Casa Mirador** · Bogotá · 03/11/2026
 
-Cinco puestos, cinco perfiles y cinco hojas de vida para una brigada de 12 personas.
+6 puestos, 6 perfiles y 6 hojas de vida para una brigada de 12 personas.
 Todo el contenido es **ficticio** y sirve como material de demostración para el
 diagnóstico de contratación.
 
@@ -15,6 +15,7 @@ diagnóstico de contratación.
 | 03 | [Cocinero A](puestos/03-cocinero-a.md) | [Perfil](perfiles/03-cocinero-a.md) | $3.400.000 a $4.200.000 | Camila Restrepo (86,5 de encaje) |
 | 04 | [Asistente de Chef Ejecutivo (administrativo)](puestos/04-asistente-de-chef-ejecutivo-administrativo.md) | [Perfil](perfiles/04-asistente-de-chef-ejecutivo-administrativo.md) | $4.400.000 a $5.400.000 | Andrés Felipe Ospina (98,1 de encaje) |
 | 05 | [Pastelero](puestos/05-pastelero.md) | [Perfil](perfiles/05-pastelero.md) | $3.200.000 a $4.000.000 | Lucía Fernanda Beltrán (94,7 de encaje) |
+| 06 | [Mayora](puestos/06-mayora.md) | [Perfil](perfiles/06-mayora.md) | $2.800.000 a $3.600.000 | María de la Luz Hernández (94,4 de encaje) |
 
 ## Hojas de vida
 
@@ -25,6 +26,7 @@ diagnóstico de contratación.
 | 03 | [Camila Restrepo](curriculos/03-camila-restrepo.md) | Profesional en Gastronomía | Cocinero A | $4.600.000 | 30 días (preaviso) |
 | 04 | [Andrés Felipe Ospina](curriculos/04-andres-felipe-ospina.md) | Administrador de Empresas Turísticas y Hoteleras | Asistente de Chef Ejecutivo (administrativo) | $5.200.000 | 45 días (preaviso) |
 | 05 | [Lucía Fernanda Beltrán](curriculos/05-lucia-fernanda-beltran.md) | Técnica en Panadería y Pastelería | Pastelero | $3.900.000 | 15 días |
+| 06 | [María de la Luz Hernández](curriculos/06-maria-de-la-luz-hernandez.md) | Secundaria | Mayora | $3.400.000 | 45 días (traslado) |
 
 ## Cómo leer estos documentos
 

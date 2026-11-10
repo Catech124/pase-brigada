@@ -12,6 +12,7 @@ Los datos son ficticios.
 | 03 | [Camila Restrepo](CV-03-camila-restrepo.pdf) | Profesional en Gastronomía | 1 |
 | 04 | [Andrés Felipe Ospina](CV-04-andres-felipe-ospina.pdf) | Administrador de Empresas Turísticas y Hoteleras | 1 |
 | 05 | [Lucía Fernanda Beltrán](CV-05-lucia-fernanda-beltran.pdf) | Técnica en Panadería y Pastelería | 1 |
+| 06 | [María de la Luz Hernández](CV-06-maria-de-la-luz-hernandez.pdf) | Secundaria | 1 |
 
 Las versiones editables están en `docs/curriculos/` y los datos de origen en
 `assets/data.js`.

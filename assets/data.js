@@ -986,6 +986,165 @@ window.BRIGADA = {
         "creatividad": "Identidad propia: un postre nuevo por temporada, con relato de producto.",
         "servicio": "Monta pases especiales y responde por restricciones alimentarias."
       }
+    },
+    {
+      "id": "mayora",
+      "nombre": "Mayora",
+      "area": "Producción tradicional",
+      "nivel": "Especialista",
+      "reporta": "Chef ejecutivo",
+      "supervisa": "2 a 4 cocineras y ayudantes",
+      "resumen": "Custodia el sazón y las recetas de la casa, organiza la producción diaria de guisos y forma a la brigada para que el sabor sea el mismo todos los días.",
+      "mision": "Sostener la cocina tradicional de la casa: producir los guisos y las salsas con la receta y el punto de siempre, organizar el trabajo de las cocineras y quedar a cargo de la cocina cuando el chef no está.",
+      "funciones": [
+        "Organizar la producción diaria de guisos, salsas y guarniciones según el volumen del servicio.",
+        "Cuidar la receta y el sazón de la casa: probar, ajustar y dejar registro de cada preparación.",
+        "Seleccionar y revisar la calidad de los insumos en la recepción.",
+        "Supervisar y enseñar a las cocineras y ayudantes de la partida tradicional.",
+        "Coordinar con el chef la rotación del menú y el aprovechamiento de sobrantes.",
+        "Quedar a cargo de la cocina cuando el chef no está.",
+        "Reportar faltantes, mermas y problemas de calidad al chef ejecutivo."
+      ],
+      "indicadores": [
+        {
+          "nombre": "Quejas por sabor",
+          "meta": "0 por semana"
+        },
+        {
+          "nombre": "Producción a tiempo",
+          "meta": "100% a las 11:30"
+        },
+        {
+          "nombre": "Merma de guisos",
+          "meta": "≤ 5%"
+        },
+        {
+          "nombre": "Cocineras formadas",
+          "meta": "2 por año"
+        }
+      ],
+      "condiciones": {
+        "jornada": "Martes a domingo, 48 horas, entrada 06:00",
+        "contrato": "Término indefinido",
+        "banda": [
+          2800000,
+          3600000
+        ],
+        "beneficios": [
+          "Alimentación en turno",
+          "Dotación",
+          "Auxilio de transporte"
+        ]
+      },
+      "requisitos": {
+        "formacion": "Secundaria terminada; formación empírica en cocina tradicional",
+        "experiencia": "10 años en cocina tradicional, fondas o comedores de volumen",
+        "tecnicos": [
+          "Guisos y salsas de la casa",
+          "Nixtamal y masa",
+          "Producción para volumen",
+          "Aprovechamiento de sobrantes"
+        ],
+        "certificaciones": [
+          "Manipulación de alimentos vigente"
+        ]
+      },
+      "perfil": {
+        "niveles": {
+          "tecnica": 92,
+          "ritmo": 78,
+          "orden": 72,
+          "costos": 55,
+          "mando": 65,
+          "admin": 25,
+          "creatividad": 55,
+          "servicio": 60
+        },
+        "formacion": "Secundaria. Sin estudios formales de gastronomía; aprendizaje familiar y de oficio.",
+        "experiencia": "15 a 30 años en cocinas tradicionales, fondas o comedores de volumen.",
+        "competencias": [
+          {
+            "nombre": "Sazón",
+            "nivel": "Alto",
+            "nota": "Reconoce el punto de un guiso sin receta."
+          },
+          {
+            "nombre": "Memoria de recetas",
+            "nivel": "Alto",
+            "nota": "Sostiene la carta tradicional sin depender del papel."
+          },
+          {
+            "nombre": "Mando de cocineras",
+            "nivel": "Medio",
+            "nota": "Corrige con autoridad y enseña con el ejemplo."
+          },
+          {
+            "nombre": "Volumen",
+            "nivel": "Medio",
+            "nota": "Produce para 100 o 600 comensales sin cambiar el sabor."
+          }
+        ],
+        "rasgos": [
+          "Autoritaria",
+          "Constante",
+          "Observadora",
+          "De palabra"
+        ],
+        "antiPerfil": [
+          "Quien cambia la receta cada semana y llama a eso \"mejorar\".",
+          "Quien no acepta que un chef joven le enseñe técnica nueva.",
+          "Quien no quiere producir volumen ni repetir el mismo guiso todos los días."
+        ]
+      },
+      "banda": [
+        2800000,
+        3600000
+      ],
+      "vacanteDias": 18,
+      "riesgoOperativo": 74,
+      "escasez": 88,
+      "notaOperativa": "Si la mayora se va, la carta tradicional pierde el sazón y la mitad de las recetas no están escritas.",
+      "relaciones": {
+        "internas": [
+          "Chef ejecutivo: reporta y coordina el menú",
+          "Cocineras y ayudantes: los supervisa y forma",
+          "Asistente administrativo: insumos, compras y costos",
+          "Jefe de partida: coordina la salida de los platos"
+        ],
+        "externas": [
+          "Proveedores de mercado: calidad de los insumos",
+          "Clientes habituales: el sazón de la casa"
+        ]
+      },
+      "autoridad": "Define la receta y el punto de sazón de la cocina tradicional. Puede rechazar un insumo que no cumpla calidad y detener un guiso que no esté en su punto. No maneja presupuesto.",
+      "riesgosPuesto": [
+        "Calor y esfuerzo físico",
+        "Choque con chefs jóvenes por la autoridad sobre la cocina tradicional",
+        "Dependencia de una sola persona para el sazón"
+      ],
+      "pruebaTecnica": [
+        "Cocinar tres guisos base para 60 personas en tres horas.",
+        "Prueba de sazón a ciegas: reconocer sal, acidez y punto de un guiso.",
+        "Organizar la producción de un menú diario con dos cocineras."
+      ],
+      "incorporacion": [
+        "Semana 1: recetas de la casa, proveedores y bodega.",
+        "Semana 2: producción acompañada del chef.",
+        "Semana 3: menú diario a su cargo.",
+        "Mes 2: formación de una cocinera y registro de recetas.",
+        "Mes 3: diez recetas estandarizadas por escrito."
+      ],
+      "anclas": {
+        "tecnica": "Domina los guisos, las salsas y el punto de la cocina tradicional.",
+        "ritmo": "Sostiene el volumen del menú diario sin cambiar el sabor.",
+        "orden": "Organiza la producción y deja la partida lista para el día siguiente.",
+        "costos": "Aprovecha sobrantes y cuida porciones; no maneja escandallos.",
+        "mando": "Dirige a las cocineras con autoridad y oficio.",
+        "admin": "Registra recetas y faltantes; no maneja presupuesto ni nómina.",
+        "creatividad": "Propone variaciones dentro de la tradición, no platos de autor.",
+        "servicio": "Conoce a los clientes habituales y cuida el sazón de la casa."
+      },
+      "preguntaCultura": "Un chef joven le pide cambiar la receta del mole que usted hace desde hace treinta años. ¿Qué hace?"
     }
   ],
   "candidatos": [
@@ -1807,6 +1966,174 @@ window.BRIGADA = {
       ],
       "verificacion": "Prueba de 40 postres en tres horas, no un postre de autor. Medir tiempo real y merma.",
       "titulo": "Técnica en Panadería y Pastelería"
+    },
+    {
+      "id": "maria",
+      "nombre": "María de la Luz Hernández",
+      "titulo": "Secundaria",
+      "edad": 58,
+      "ciudad": "Ciudad de México, en traslado a Bogotá",
+      "puestoAplicado": "mayora",
+      "titular": "Mayora · cocina tradicional mexicana",
+      "contacto": {
+        "tel": "+52 55 1234 5678",
+        "mail": "marialuz.mayora@gmail.com",
+        "linkedin": ""
+      },
+      "resumen": "Llevo más de treinta años en cocinas de fondas y comedores. Sé hacer los guisos de la casa, las salsas y el arroz como se hacían en mi pueblo. He producido para 1.200 comidas diarias sin cambiar el sabor.",
+      "experiencia": [
+        {
+          "cargo": "Mayora",
+          "empresa": "El Fogón de Doña Luz",
+          "periodo": "2014 - actual",
+          "contexto": "Cocina tradicional mexicana, 120 comensales, menú del día.",
+          "logros": [
+            "Guisos del día: mole, pozole, enchiladas, arroz y frijoles.",
+            "Organizo la producción de la cocina y superviso a cuatro cocineras.",
+            "Reviso la calidad de los insumos en la recepción.",
+            "Cuando el chef no está, quedo a cargo del servicio."
+          ]
+        },
+        {
+          "cargo": "Cocinera de producción",
+          "empresa": "Comedor industrial Grupo Siglo",
+          "periodo": "2003 - 2014",
+          "contexto": "1.200 comidas diarias, tres turnos.",
+          "logros": [
+            "Producción de guisos y guarniciones para el menú diario.",
+            "Control de porciones y aprovechamiento de sobrantes.",
+            "Capacitación de cocineras nuevas."
+          ]
+        },
+        {
+          "cargo": "Cocinera",
+          "empresa": "Fonda La Güera",
+          "periodo": "1990 - 2003",
+          "contexto": "Fonda familiar, 40 comensales.",
+          "logros": [
+            "Cocina de guisos y desayunos.",
+            "Atención de clientes y cierre de caja.",
+            "Recetas de la familia."
+          ]
+        }
+      ],
+      "formacion": [
+        {
+          "titulo": "Secundaria terminada",
+          "institucion": "Escuela Secundaria No. 8, Ciudad de México",
+          "anio": 1984
+        },
+        {
+          "titulo": "Curso de higiene y manejo de alimentos",
+          "institucion": "Centro de capacitación",
+          "anio": 2023
+        }
+      ],
+      "certificaciones": [
+        {
+          "nombre": "Manipulación de alimentos",
+          "estado": "Vigente hasta 08/2028"
+        }
+      ],
+      "habilidades": {
+        "tecnicas": [
+          "Guisos y salsas",
+          "Nixtamal y masa",
+          "Arroz y frijoles",
+          "Producción para volumen",
+          "Aprovechamiento de sobrantes"
+        ],
+        "gestion": [
+          "Organización de producción",
+          "Supervisión de cocineras",
+          "Registro de recetas"
+        ],
+        "herramientas": [
+          "Olla express",
+          "Comal",
+          "Molino"
+        ]
+      },
+      "idiomas": [
+        "Español nativo"
+      ],
+      "referencias": [
+        {
+          "nombre": "Luz María Domínguez",
+          "cargo": "Dueña, El Fogón de Doña Luz",
+          "nota": "Tel. +52 55 8765 4321"
+        },
+        {
+          "nombre": "Rafael Soto",
+          "cargo": "Gerente, Comedor Grupo Siglo",
+          "nota": "Contacto disponible"
+        }
+      ],
+      "expectativa": 3400000,
+      "disponibilidad": {
+        "texto": "45 días (traslado)",
+        "dias": 45
+      },
+      "vector": {
+        "tecnica": 95,
+        "ritmo": 80,
+        "orden": 70,
+        "costos": 50,
+        "mando": 65,
+        "admin": 20,
+        "creatividad": 50,
+        "servicio": 60
+      },
+      "cultura": {
+        "rigor": 85,
+        "ritmo": 80,
+        "hospitalidad": 85,
+        "estructura": 60,
+        "creatividad": 45,
+        "estabilidad": 95
+      },
+      "entrevista": {
+        "evidencia": 60,
+        "trayectoria": 95,
+        "disponibilidad": 70,
+        "referencias": 85,
+        "riesgo": 25
+      },
+      "banderas": {
+        "manipulacion": "vigente",
+        "findes": true,
+        "altaCocina": false,
+        "costos": false,
+        "liderazgo": true
+      },
+      "banderasNota": {
+        "costos": "No maneja escandallos ni food cost."
+      },
+      "riesgos": [
+        {
+          "tipo": "formación",
+          "texto": "Sin estudios formales: puede chocar con un chef joven si no se le da autoridad clara sobre la cocina tradicional."
+        },
+        {
+          "tipo": "costos",
+          "texto": "No maneja escandallos ni food cost; necesita apoyo del área administrativa."
+        },
+        {
+          "tipo": "traslado",
+          "texto": "Viene de Ciudad de México: confirmar documentos y fecha real de llegada."
+        }
+      ],
+      "notas": [
+        "Pedir referencias a la dueña del fogón y al gerente del comedor.",
+        "Prueba de guisos para 60 personas, con sazón a ciegas.",
+        "Aclarar por escrito quién manda cuando el chef y la mayora no coinciden."
+      ],
+      "logrosClave": [
+        "1.200 comidas diarias",
+        "4 cocineras a cargo",
+        "30 años de oficio"
+      ],
+      "verificacion": "Prueba de sazón a ciegas: tres guisos base y una salsa; medir tiempo, merma y consistencia entre tandas."
     }
   ],
   "preguntas": {

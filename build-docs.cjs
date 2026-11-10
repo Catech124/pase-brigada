@@ -284,7 +284,7 @@ function indice() {
 
 **Casa Mirador** · Bogotá · ${fecha}
 
-Cinco puestos, cinco perfiles y cinco hojas de vida para una brigada de 12 personas.
+${PUESTOS.length} puestos, ${PUESTOS.length} perfiles y ${CANDIDATOS.length} hojas de vida para una brigada de 12 personas.
 Todo el contenido es **ficticio** y sirve como material de demostración para el
 diagnóstico de contratación.
 

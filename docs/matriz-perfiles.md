@@ -4,16 +4,16 @@
 
 ## Competencias por puesto (nivel mínimo 0 a 100)
 
-| Dimensión | Steward | Cocinero B | Cocinero A | Asistente de Chef Ejecutivo (administrativo) | Pastelero |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Técnica culinaria | 20 | 62 | 85 | 55 | 88 |
-| Ritmo y volumen | 65 | 72 | 82 | 60 | 55 |
-| Orden e higiene | 92 | 70 | 76 | 85 | 90 |
-| Control de costos | 45 | 45 | 62 | 92 | 65 |
-| Mando de brigada | 10 | 20 | 45 | 70 | 30 |
-| Administración | 15 | 20 | 35 | 95 | 45 |
-| Creatividad e I+D | 5 | 30 | 58 | 35 | 90 |
-| Servicio y trato | 60 | 25 | 30 | 55 | 35 |
+| Dimensión | Steward | Cocinero B | Cocinero A | Asistente de Chef Ejecutivo (administrativo) | Pastelero | Mayora |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Técnica culinaria | 20 | 62 | 85 | 55 | 88 | 92 |
+| Ritmo y volumen | 65 | 72 | 82 | 60 | 55 | 78 |
+| Orden e higiene | 92 | 70 | 76 | 85 | 90 | 72 |
+| Control de costos | 45 | 45 | 62 | 92 | 65 | 55 |
+| Mando de brigada | 10 | 20 | 45 | 70 | 30 | 65 |
+| Administración | 15 | 20 | 35 | 95 | 45 | 25 |
+| Creatividad e I+D | 5 | 30 | 58 | 35 | 90 | 55 |
+| Servicio y trato | 60 | 25 | 30 | 55 | 35 | 60 |
 
 ## Cultura de la empresa
 
@@ -35,6 +35,7 @@
 | Cocinero A | $3.400.000 | $4.200.000 | 46 | 78 | 70 |
 | Asistente de Chef Ejecutivo (administrativo) | $4.400.000 | $5.400.000 | 63 | 88 | 82 |
 | Pastelero | $3.200.000 | $4.000.000 | 30 | 70 | 65 |
+| Mayora | $2.800.000 | $3.600.000 | 18 | 74 | 88 |
 
 ## Cómo se interpreta
 

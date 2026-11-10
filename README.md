@@ -35,7 +35,7 @@ datos: nada se envía a internet.
 
 ## Currículas de ejemplo
 
-Cinco hojas de vida en PDF, una por persona y de una página, en `curriculos/`.
+Seis hojas de vida en PDF, una por persona y de una página, en `curriculos/`.
 Están escritas como CV reales: tareas además de logros, cifras aproximadas,
 referencias dispares y algún trabajo corto. No son casos de estudio.
 
@@ -46,6 +46,7 @@ referencias dispares y algún trabajo corto. No son casos de estudio.
 | 03 | `CV-03-Camila-Restrepo.pdf` | Profesional en Gastronomía |
 | 04 | `CV-04-Andres-Felipe-Ospina.pdf` | Administrador de Empresas Turísticas y Hoteleras |
 | 05 | `CV-05-Lucia-Fernanda-Beltran.pdf` | Técnica en Panadería y Pastelería |
+| 06 | `CV-06-Maria-de-la-Luz-Hernandez.pdf` | Secundaria (mayora, cocina tradicional) |
 
 Las versiones editables están en `docs/curriculos/` y los datos de origen en
 `assets/data.js`.
