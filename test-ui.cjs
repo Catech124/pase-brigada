@@ -91,35 +91,35 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const informe = {};
   informe.titulo = await evaluate('document.title');
   informe.empresa = await evaluate("document.getElementById('topEmpresa').textContent");
-  informe.nav = await evaluate("document.querySelectorAll('#nav [data-nav]').length");
+  informe.nav = await evaluate("document.querySelectorAll('#nav [data-nav], #navSub [data-nav]').length");
   informe.rank = await evaluate("document.querySelectorAll('.rank-row').length");
-  informe.radar = await evaluate("document.querySelectorAll('svg.radar').length");
   informe.crit = await evaluate("document.querySelectorAll('.crit-row').length");
-  informe.veredictos = await evaluate("document.querySelectorAll('.card-main, .card-mini').length");
+  informe.decisiones = await evaluate("document.querySelectorAll('.decision').length");
+  informe.tabs = await evaluate("document.querySelectorAll('[data-tab-resumen]').length");
 
   await capturar('01-resumen-top');
-  await capturarEn('02-resumen-veredictos', '.veredictos');
-  await capturarEn('03-resumen-ranking', '.rank');
-  await capturarEn('04-resumen-detalle', '#plan');
+  await capturarEn('02-resumen-decisiones', '.decisions');
+  await capturarEn('03-resumen-tabs', '.tabs-seg');
+  await capturarEn('04-resumen-ranking', '.rank');
 
   const vistas = ['puestos', 'candidatos', 'matriz', 'datos', 'metodo'];
   for (let i = 0; i < vistas.length; i++) {
-    await evaluate("document.querySelector('#nav [data-nav=\"" + vistas[i] + "\"]').click()");
+    await evaluate("document.querySelector('[data-nav=\"" + vistas[i] + "\"]').click()");
     await wait(500);
-    informe[vistas[i]] = await evaluate("document.querySelectorAll('#vista .sec, #vista .hero').length");
+    informe[vistas[i]] = await evaluate("document.querySelectorAll('#vista .sec, #vista .page-head').length");
     if (vistas[i] === 'matriz') informe.celdas = await evaluate("document.querySelectorAll('.matriz .cell').length");
     if (vistas[i] === 'candidatos') informe.cv = await evaluate("document.querySelectorAll('.cv').length");
     await capturar('0' + (i + 5) + '-' + vistas[i]);
   }
 
-  await evaluate("document.querySelector('#nav [data-nav=\"resumen\"]').click()");
+  await evaluate("document.querySelector('[data-nav=\"resumen\"]').click()");
   await wait(300);
   await evaluate("var s=document.querySelector('[data-ctx=\"dolor\"]'); s.value='creatividad'; s.dispatchEvent(new Event('change',{bubbles:true}))");
   await wait(500);
   informe.dolor = await evaluate("document.querySelector('#brief select').value");
-  informe.trasCambio = await evaluate("document.querySelector('.card-main h3').textContent");
-  informe.criticaTrasCambio = await evaluate("document.querySelectorAll('.card-mini .who')[0].textContent");
-  await capturarEn('10-resumen-creatividad', '.veredictos');
+  informe.trasCambio = await evaluate("document.querySelector('.page-head h1').textContent");
+  informe.criticaTrasCambio = await evaluate("document.querySelectorAll('.decision')[1].querySelector('.d-name').textContent");
+  await capturarEn('10-resumen-creatividad', '.decisions');
 
   await evaluate("document.querySelector('[data-tema]').click()");
   await wait(400);

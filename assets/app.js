@@ -19,6 +19,8 @@
     cand: null,
     puesto: null,
     tab: 'descripcion',
+    tabResumen: 'ranking',
+    ctxOpen: false,
     matriz: null,
     ctx: {},
     errores: [],
@@ -59,6 +61,10 @@
     var p = String(n || '').split(' ').filter(Boolean);
     return p.length > 1 ? p[0] + ' ' + p[p.length - 1] : p[0] || '';
   }
+  function fechaHoy() {
+    return new Date().toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
   function fecha() {
     var f = DATA.meta && DATA.meta.actualizado ? new Date(DATA.meta.actualizado + 'T12:00:00') : new Date();
     return f.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -150,10 +156,10 @@
   /* ------------------------------- armazón ------------------------------- */
   function render() {
     $('#topEmpresa').textContent = (DATA.empresa && DATA.empresa.nombre) || 'Sin nombre';
-    $('#topMeta').textContent = DATA.puestos.length + ' puestos · ' + DATA.candidatos.length + ' candidatos';
-    $('#railNota').textContent = (DATA.meta && DATA.meta.aviso) || 'El diagnóstico ordena la conversación; no decide por ti.';
+    $('#wsMeta').textContent = DATA.puestos.length + ' puestos · ' + DATA.candidatos.length + ' candidatos';
+    var badge = $('#wsBadge');
+    if (badge) badge.textContent = leer(LS_DATA) ? 'Datos importados' : 'Datos de ejemplo';
     renderNav();
-    renderRail();
     var v = $('#vista');
     v.innerHTML = VISTAS[state.vista] ? VISTAS[state.vista]() : VISTAS.resumen();
     v.classList.remove('view-enter');
@@ -163,186 +169,221 @@
   }
 
   function renderNav() {
-    Array.prototype.forEach.call(document.querySelectorAll('[data-nav]'), function (b) {
-      if (b.getAttribute('data-nav') === state.vista) b.setAttribute('aria-current', b.classList.contains('nav') ? 'page' : 'true');
-      else b.removeAttribute('aria-current');
-    });
-    Array.prototype.forEach.call(document.querySelectorAll('#nav [data-nav]'), function (b) {
+    Array.prototype.forEach.call(document.querySelectorAll('#nav [data-nav], #navSub [data-nav]'), function (b) {
       if (b.getAttribute('data-nav') === state.vista) b.setAttribute('aria-current', 'page');
       else b.removeAttribute('aria-current');
     });
   }
 
-  function renderRail() {
-    var rail = $('#railResumen');
-    if (!rail) return;
-    var f = D && D.veredictos && D.veredictos.contratacion;
-    var p = D && D.veredictos && D.veredictos.criticidad;
-    if (!f || !p) {
-      rail.innerHTML = '<div class="k"><span>Sin datos suficientes</span><b>—</b></div>';
-      return;
-    }
-    rail.innerHTML =
-      '<div class="k"><span>Vacante crítica</span><b>' + esc(cortoPuesto(p.nombre)) + '</b></div>' +
-      '<div class="k"><span>Fichaje</span><b>' + esc(nombreCorto(f.nombre)) + '</b></div>' +
-      '<div class="k"><span>Candidatos</span><b>' + DATA.candidatos.length + '</b></div>';
+  function pageHeadSimple(kicker, title, sub) {
+    return '<div class="page-head"><div class="page-head-main">' +
+      '<p class="page-kicker">' + esc(kicker) + '</p>' +
+      '<h1>' + esc(title) + '</h1>' +
+      (sub ? '<p class="page-sub">' + esc(sub) + '</p>' : '') +
+      '</div></div>';
   }
 
-  /* -------------------------------- brief -------------------------------- */
-  function viewBrief() {
+  function pageHeadHTML() {
+    if (!D || D.vacio) {
+      return pageHeadSimple('Diagnóstico', 'Sin datos', 'Carga un conjunto con al menos un puesto y un candidato.');
+    }
+    var f = D.veredictos.contratacion;
+    var margen = D.margenIndice < 3
+      ? 'empate técnico con el segundo'
+      : nf(D.margenIndice, 1) + ' puntos sobre el segundo';
+    return '<div class="page-head" id="pageHead">' +
+      '<div class="page-head-main">' +
+      '<p class="page-kicker">Diagnóstico · ' + fechaHoy() + '</p>' +
+      '<h1>Fichar a ' + esc(f.nombre) + '</h1>' +
+      '<p class="page-sub">' + esc(f.puestoNombre) + ' · ' + margen + '</p>' +
+      '</div>' +
+      '<div class="page-actions">' +
+      '<div class="head-score">' + ni(f.indice) + '<small>/100</small></div>' +
+      '<button class="btn btn--solid" type="button" data-cand="' + esc(f.id) + '">Ver ficha</button>' +
+      '</div></div>';
+  }
+
+  function chipsHTML() {
     var c = state.ctx;
-    var dol = (DATA.dolores || []).filter(function (d) { return d.id === c.dolor; })[0] || (DATA.dolores || [])[0] || {};
-    return '<section class="brief" id="brief">' +
-      '<div class="brief-head"><h2>Contexto de la empresa</h2><p>Se guarda en este navegador</p></div>' +
+    var dol = (DATA.dolores || []).filter(function (d) { return d.id === c.dolor; })[0] || {};
+    var pres = { ajustado: 'Ajustado', estandar: 'Estándar', amplio: 'Amplio' }[c.presupuesto] || c.presupuesto;
+    return '<div class="context-bar" id="ctxChips">' +
+      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Dolor</span><b>' + esc(dol.nombre || '—') + '</b></button>' +
+      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Presupuesto</span><b>' + esc(pres) + '</b></button>' +
+      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Urgencia</span><b>' + c.urgencia + '</b></button>' +
+      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Cultura</span><b>' + c.culturaPeso + '</b></button>' +
+      '<button class="ctx-toggle btn btn--ghost btn--sm" type="button" data-ctx-toggle aria-expanded="' + (state.ctxOpen ? 'true' : 'false') + '">' +
+      (state.ctxOpen ? 'Cerrar' : 'Ajustar') + '</button>' +
+      '</div>';
+  }
+
+  function ctxPanelHTML() {
+    var c = state.ctx;
+    return '<div class="ctx-panel' + (state.ctxOpen ? ' open' : '') + '" id="ctxPanel">' +
+      '<div class="ctx-head"><span>Contexto de la empresa</span>' +
+      '<button class="btn btn--ghost btn--sm" type="button" data-ctx-reset>Restablecer</button></div>' +
       '<div class="brief-grid">' +
+
       '<div class="field"><label for="selDolor">Dolor principal</label>' +
       '<select id="selDolor" data-ctx="dolor">' +
       (DATA.dolores || []).map(function (d) {
         return '<option value="' + esc(d.id) + '"' + (d.id === c.dolor ? ' selected' : '') + '>' + esc(d.nombre) + '</option>';
       }).join('') +
-      '</select><p class="hint" id="dolorHint">' + esc(dol.desc || '') + '</p></div>' +
+      '</select></div>' +
 
       '<div class="field"><span class="lab">Presupuesto</span><div class="seg">' +
       [['ajustado', 'Ajustado'], ['estandar', 'Estándar'], ['amplio', 'Amplio']].map(function (x) {
         return '<label><input type="radio" name="presupuesto" data-ctx="presupuesto" value="' + x[0] + '"' + (c.presupuesto === x[0] ? ' checked' : '') + '>' + x[1] + '</label>';
-      }).join('') + '</div><p class="hint">Tope sobre la banda de cada puesto.</p></div>' +
+      }).join('') +
+      '</div></div>' +
 
       '<div class="field"><span class="lab">Urgencia</span><div class="range">' +
       '<input type="range" min="0" max="100" step="5" value="' + c.urgencia + '" data-range="urgencia" aria-label="Urgencia">' +
-      '<div class="range-out"><span>Puedo esperar</span><b data-out="urgencia">' + c.urgencia + '</b><span>Necesito cubrir ya</span></div></div></div>' +
+      '<div class="range-out"><span>Puedo esperar</span><b data-out="urgencia">' + c.urgencia + '</b><span>Ya</span></div></div></div>' +
 
       '<div class="field"><span class="lab">Peso de la cultura</span><div class="range">' +
       '<input type="range" min="0" max="100" step="5" value="' + c.culturaPeso + '" data-range="culturaPeso" aria-label="Peso de la cultura">' +
-      '<div class="range-out"><span>Solo el puesto</span><b data-out="culturaPeso">' + c.culturaPeso + '</b><span>La cultura pesa</span></div></div></div>' +
+      '<div class="range-out"><span>Puesto</span><b data-out="culturaPeso">' + c.culturaPeso + '</b><span>Cultura</span></div></div></div>' +
 
       '<div class="field field--wide"><span class="lab">Requisitos eliminatorios</span><div class="checks">' +
       (DATA.noNegociables || []).map(function (n) {
         return '<label class="check"><input type="checkbox" data-nn="' + esc(n.id) + '"' + (c.noNegociables.indexOf(n.id) > -1 ? ' checked' : '') + '>' + esc(n.nombre) + '</label>';
-      }).join('') + '</div><p class="hint">Si el candidato no cumple, se castiga fuerte y queda marcado.</p></div>' +
+      }).join('') +
+      '</div></div>' +
+
       '</div>' +
-      '<div class="brief-foot"><span id="pesosLinea">' + pesosLinea() + '</span><span>' +
-      DATA.candidatos.length + ' candidatos · ' + DATA.puestos.length + ' puestos</span></div>' +
-      '</section>';
+      '<div class="ctx-foot" id="pesosLinea">' + pesosLinea() + '</div>' +
+      '</div>';
   }
 
   function pesosLinea() {
-    return 'Pesos vivos: <b>impacto ' + pct(D.pesos.impacto) + '</b>, <b>cultura ' + pct(D.pesos.cultura) +
-      '</b>, <b>potencial ' + pct(D.pesos.potencial) + '</b>, <b>riesgo ' + pct(D.pesos.riesgo) + '</b>.';
+    return 'Pesos: impacto ' + pct(D.pesos.impacto) + ' · cultura ' + pct(D.pesos.cultura) +
+      ' · potencial ' + pct(D.pesos.potencial) + ' · riesgo ' + pct(D.pesos.riesgo);
+  }
+
+  function toggleCtx() {
+    state.ctxOpen = !state.ctxOpen;
+    var p = $('#ctxPanel');
+    if (p) p.classList.toggle('open', state.ctxOpen);
+    var b = $('.ctx-toggle');
+    if (b) {
+      b.textContent = state.ctxOpen ? 'Cerrar' : 'Ajustar';
+      b.setAttribute('aria-expanded', state.ctxOpen ? 'true' : 'false');
+    }
   }
 
   /* -------------------------------- vistas -------------------------------- */
   var VISTAS = {};
 
   VISTAS.resumen = function () {
-    var nP = DATA.puestos.length, nC = DATA.candidatos.length;
-    var e = DATA.empresa || {};
-    return '<div class="hero">' +
-      '<div class="hero-top"><span class="folio">Diagnóstico · ' + fecha() + '</span><span class="folio">' + nP + ' puestos · ' + nC + ' candidatos</span></div>' +
-      '<h1>Qué vacante cubrir primero, y con quién.</h1>' +
-      '<p class="lead">Cruza el perfil de cada puesto con cada hoja de vida y con el contexto de tu empresa. Cambia el contexto y el orden se recalcula.</p>' +
-      '<div class="meta-row">' +
-      '<span><b>' + (nP * nC) + '</b> cruces evaluados</span>' +
-      '<span>Dolor: <b id="metaDolor">' + esc(D.dolor ? D.dolor.nombre : 'sin definir') + '</b></span>' +
-      (e.tipo ? '<span>' + esc(e.tipo) + '</span>' : '') +
-      (e.ciudad ? '<span>' + esc(e.ciudad) + '</span>' : '') +
-      '</div></div>' +
-      viewBrief() +
+    return pageHeadHTML() + chipsHTML() + ctxPanelHTML() +
       '<div id="resultados">' + resultadosHTML() + '</div>';
   };
 
   function resultadosHTML() {
     if (!D || D.vacio) {
-      return '<section class="sec"><div class="empty"><h3>Faltan datos para diagnosticar</h3>' +
-        '<p>' + esc(D ? D.motivo : 'No se pudo calcular el diagnóstico.') + ' Importa un conjunto con al menos un puesto y un candidato.</p>' +
-        '<button class="btn btn--solid" data-nav="datos">Ir a Datos</button></div></section>';
+      return '<div class="empty"><h3>Faltan datos para diagnosticar</h3>' +
+        '<p>' + esc(D ? D.motivo : 'No se pudo calcular el diagnóstico.') + '</p>' +
+        '<button class="btn btn--solid" data-nav="datos">Ir a Datos</button></div>';
     }
+    return decisionsHTML() + tieHTML() + tabsHTML();
+  }
+
+  function decisionsHTML() {
     var f = D.veredictos.contratacion;
     var p = D.veredictos.criticidad;
     var cul = D.veredictos.cultura;
     var ent = D.veredictos.entrevista;
-    var pc = p ? D.puestos.filter(function (x) { return x.id === p.id; })[0] : null;
+    return '<div class="decisions">' +
+      '<article class="decision decision--primary">' +
+      '<span class="d-label">Fichaje recomendado</span>' +
+      '<span class="d-name">' + esc(f.nombre) + '</span>' +
+      '<span class="d-role">' + esc(f.puestoNombre) + (f.asignadoAuto ? ' · asignado automáticamente' : '') + '</span>' +
+      '<span class="d-meta">Encaje ' + ni(f.fit) + ' · Cultura ' + ni(f.cultura) + ' · Entrevista ' + ni(f.prioridad) + '</span>' +
+      '<span class="d-why">' + esc(razonCorta(f)) + '</span>' +
+      '</article>' +
+      decisionMini('Vacante crítica', p.nombre, p.criticidad, p.vacanteDias + ' días abierta', 'data-puesto="' + esc(p.id) + '"') +
+      decisionMini('Match cultural', cul.nombre, cul.cultura, cul.puestoNombre, 'data-cand="' + esc(cul.id) + '"') +
+      decisionMini('Entrevistar primero', ent.nombre, ent.prioridad, 'Expediente ' + ni(ent.potencial), 'data-cand="' + esc(ent.id) + '"') +
+      '</div>';
+  }
+
+  function razonCorta(f) {
+    var fort = f.fortalezas[0];
+    return (fort ? dim(fort.dim).nombre + ' +' + fort.dif : 'Cumple el perfil') + ' · impacto ' + ni(f.impacto);
+  }
+
+  function decisionMini(label, name, score, meta, attr) {
+    return '<article class="decision">' +
+      '<span class="d-label">' + esc(label) + '</span>' +
+      '<span class="d-name">' + esc(name) + '</span>' +
+      '<span class="d-score">' + nf(score, 1) + '</span>' +
+      '<span class="d-meta">' + esc(meta) + '</span>' +
+      '<button class="d-link" type="button" ' + attr + '>Ver →</button>' +
+      '</article>';
+  }
+
+  function tieHTML() {
+    if (!D || D.vacio || D.filas.length < 2 || D.margenCultura >= 3) return '';
     var porCultura = D.filas.slice().sort(function (a, b) { return b.cultura - a.cultura; });
-    var mejorP = pc && pc.mejorCandidato ? candById(pc.mejorCandidato.candidato) : null;
+    return '<p class="note-tie"><b>Empate en cultura:</b> ' + esc(porCultura[0].nombre) + ' (' + nf(porCultura[0].cultura, 1) + ') y ' +
+      esc(porCultura[1].nombre) + ' (' + nf(porCultura[1].cultura, 1) + ') están a ' + nf(D.margenCultura, 1) + ' puntos. Decide la entrevista.</p>';
+  }
 
-    return '' +
-      /* veredictos */
-      '<section class="sec"><div class="sec-head"><h2>Los cuatro veredictos</h2><span class="n">Lectura directa</span></div>' +
-      '<div class="veredictos">' +
-      '<article class="card-main">' +
-      '<div class="cm-left">' +
-      '<span class="tag">01 · Fichaje recomendado</span>' +
-      '<h3>' + esc(f.nombre) + '</h3>' +
-      '<p class="role">' + esc(f.puestoNombre) + (f.asignadoAuto ? ' · asignado automáticamente' : '') + '</p>' +
-      '<p class="why">' + esc(razonFichaje(f)) + '</p>' +
-      '</div><div class="cm-right">' +
-      '<div class="score-row"><span class="big">' + ni(f.indice) + '<small>/100</small></span>' +
-      '<span class="score-meta">índice de contratación<br>' + (D.margenIndice < 3 ? 'empate técnico con el segundo' : 'ventaja de ' + nf(D.margenIndice, 1) + ' puntos') + '</span></div>' +
-      '<div class="micro"><div><span>Encaje</span><b>' + ni(f.fit) + '</b></div><div><span>Cultura</span><b>' + ni(f.cultura) + '</b></div><div><span>Entrevista</span><b>' + ni(f.prioridad) + '</b></div></div>' +
-      '<div class="card-actions"><button class="btn btn--sm" data-cand="' + esc(f.id) + '">Ver ficha completa</button>' +
-      '<button class="btn btn--sm" data-go="plan">Plan de entrevista</button></div>' +
-      '</div></article>' +
+  function tabsHTML() {
+    var tabs = [
+      { id: 'ranking', label: 'Ranking', n: D.filas.length },
+      { id: 'vacantes', label: 'Vacantes', n: D.rankingPuestos.length },
+      { id: 'escenarios', label: 'Escenarios', n: (DATA.dolores || []).length }
+    ];
+    return '<div class="tabs-seg" role="tablist">' +
+      tabs.map(function (t) {
+        return '<button type="button" role="tab" aria-selected="' + (state.tabResumen === t.id) + '" data-tab-resumen="' + t.id + '">' +
+          esc(t.label) + '<span>' + t.n + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="tab-panel" role="tabpanel">' + panelHTML(state.tabResumen) + '</div>';
+  }
 
-      '<div class="stack">' +
-      '<article class="card-mini"><span class="tag">02 · Vacante más crítica</span>' +
-      '<div class="row"><span class="who">' + esc(p.nombre) + '</span><span class="val">' + nf(p.criticidad, 1) + '</span></div>' +
-      '<p class="what">Alineación ' + ni(p.critComponentes.alineacion) + ' · riesgo ' + ni(p.critComponentes.riesgo) + ' · escasez ' + ni(p.critComponentes.escasez) + '</p>' +
-      '<p class="why">' + esc((puestoById(p.id) && puestoById(p.id).notaOperativa) || (mejorP ? 'Mejor candidato en la matriz: ' + mejorP.nombre + ' (' + nf(pc.mejorCandidato.fit, 1) + ').' : 'Sin candidatos evaluados.')) + '</p>' +
-      '<button class="link" data-puesto="' + esc(p.id) + '">Ver descripción →</button></article>' +
+  function panelHTML(id) {
+    if (id === 'vacantes') return panelVacantes();
+    if (id === 'escenarios') return panelEscenarios();
+    return panelRanking();
+  }
 
-      '<article class="card-mini"><span class="tag">03 · Mejor match cultural</span>' +
-      '<div class="row"><span class="who">' + esc(cul.nombre) + '</span><span class="val">' + nf(cul.cultura, 1) + '</span></div>' +
-      '<p class="what">' + esc(cul.puestoNombre) + '</p>' +
-      '<p class="why">' + razonCultura(cul) + '</p>' +
-      '<button class="link" data-cand="' + esc(cul.id) + '">Ver hoja de vida →</button></article>' +
-
-      '<article class="card-mini"><span class="tag">04 · Entrevistar primero</span>' +
-      '<div class="row"><span class="who">' + esc(ent.nombre) + '</span><span class="val">' + nf(ent.prioridad, 1) + '</span></div>' +
-      '<p class="what">' + esc(ent.puestoNombre) + '</p>' +
-      '<p class="why">' + razonEntrevista(ent) + '</p>' +
-      '<button class="link" data-cand="' + esc(ent.id) + '">Ver plan →</button></article>' +
-      '</div></div>' +
-      (D.margenCultura < 3 ? '<p class="note-tie"><b>Empate técnico en cultura:</b> ' + esc(cul.nombre) + ' (' + nf(cul.cultura, 1) + ') y ' + esc(porCultura[1].nombre) + ' (' + nf(porCultura[1].cultura, 1) + ') están a ' + nf(D.margenCultura, 1) + ' puntos. Ese eje no decide: decide la entrevista.</p>' : '') +
-      '</section>' +
-
-      /* sensibilidad */
-      '<section class="sec"><div class="sec-head"><h2>Si el dolor cambia, el orden cambia</h2><span class="n">Sensibilidad</span></div>' +
-      '<div class="sens">' + (DATA.dolores || []).map(function (d) {
-        var r = d.id === state.ctx.dolor ? D : M.diagnosticar(DATA, Object.assign({}, state.ctx, { dolor: d.id }));
-        var ff = r.veredictos && r.veredictos.contratacion;
-        var pp = r.veredictos && r.veredictos.criticidad;
-        return '<div class="sens-row' + (d.id === state.ctx.dolor ? ' top' : '') + '">' +
-          '<span class="d"><b>' + esc(d.nombre) + '</b></span>' +
-          '<span class="r">' + esc(ff ? ff.nombre : '—') + '<em>fichaje</em></span>' +
-          '<span class="r">' + esc(pp ? pp.nombre : '—') + '<em>vacante crítica</em></span></div>';
-      }).join('') + '</div></section>' +
-
-      /* ranking */
-      '<section class="sec"><div class="sec-head"><h2>Orden de contratación</h2><span class="n">' + D.filas.length + ' candidatos</span></div>' +
-      '<div class="rank-head"><span></span><span>Candidato</span><span>Índice</span><span>Encaje</span><span>Cultura</span><span>Entrev.</span><span></span></div>' +
+  function panelRanking() {
+    return '<div class="rank-head"><span></span><span>Candidato</span><span>Índice</span><span>Encaje</span><span>Cultura</span><span></span></div>' +
       '<ol class="rank">' + D.filas.map(function (x) {
         return '<li><button class="rank-row" data-cand="' + esc(x.id) + '">' +
           '<span class="pos">' + x.posicion + '</span>' +
           '<span class="who"><b>' + esc(x.nombre) + '</b><span>' + esc(x.puestoNombre) + '</span>' +
           '<span class="mini-bar"><i style="width:' + clamp(x.indice, 0, 100) + '%"></i></span></span>' +
-          '<span class="metric"><span>Índice</span><b>' + nf(x.indice, 1) + '</b></span>' +
-          '<span class="metric"><span>Encaje</span><b>' + nf(x.fit, 1) + '</b></span>' +
-          '<span class="metric"><span>Cultura</span><b>' + nf(x.cultura, 1) + '</b></span>' +
-          '<span class="metric"><span>Entrev.</span><b>' + nf(x.prioridad, 1) + '</b></span>' +
+          '<span class="metric"><b>' + nf(x.indice, 1) + '</b></span>' +
+          '<span class="metric"><b>' + nf(x.fit, 1) + '</b></span>' +
+          '<span class="metric"><b>' + nf(x.cultura, 1) + '</b></span>' +
           '<span class="arrow">→</span></button></li>';
-      }).join('') + '</ol></section>' +
+      }).join('') + '</ol>';
+  }
 
-      /* criticidad */
-      '<section class="sec"><div class="sec-head"><h2>Vacantes por criticidad</h2><span class="n">Dónde duele dejarlo abierto</span></div>' +
-      '<div class="crit-list">' + D.rankingPuestos.map(function (x) {
-        return '<button class="crit-row" data-puesto="' + esc(x.id) + '">' +
-          '<span class="name"><b>' + esc(x.nombre) + '</b><span>' + x.vacanteDias + ' días abierta · banda ' + money(x.banda[0]) + ' a ' + money(x.banda[1]) + '</span></span>' +
-          '<span class="track-wrap"><span class="track"><i style="width:' + clamp(x.criticidad, 0, 100) + '%"></i></span>' +
-          '<span class="crit-comp"><span>alin ' + ni(x.critComponentes.alineacion) + '</span><span>riesgo ' + ni(x.critComponentes.riesgo) + '</span><span>escasez ' + ni(x.critComponentes.escasez) + '</span></span></span>' +
-          '<span class="val">' + nf(x.criticidad, 1) + '</span></button>';
-      }).join('') + '</div></section>' +
+  function panelVacantes() {
+    return '<div class="crit-list">' + D.rankingPuestos.map(function (x) {
+      return '<button class="crit-row" data-puesto="' + esc(x.id) + '">' +
+        '<span class="name"><b>' + esc(x.nombre) + '</b><span>' + x.vacanteDias + ' días abierta · ' + money(x.banda[0]) + ' a ' + money(x.banda[1]) + '</span></span>' +
+        '<span class="track-wrap"><span class="track"><i style="width:' + clamp(x.criticidad, 0, 100) + '%"></i></span>' +
+        '<span class="crit-comp"><span>alin ' + ni(x.critComponentes.alineacion) + '</span><span>riesgo ' + ni(x.critComponentes.riesgo) + '</span><span>escasez ' + ni(x.critComponentes.escasez) + '</span></span></span>' +
+        '<span class="val">' + nf(x.criticidad, 1) + '</span></button>';
+    }).join('') + '</div>';
+  }
 
-      /* detalle del fichaje */
-      detalleFichaje(f);
+  function panelEscenarios() {
+    return '<div class="sens">' + (DATA.dolores || []).map(function (d) {
+      var r = d.id === state.ctx.dolor ? D : M.diagnosticar(DATA, Object.assign({}, state.ctx, { dolor: d.id }));
+      var ff = r.veredictos && r.veredictos.contratacion;
+      var pp = r.veredictos && r.veredictos.criticidad;
+      return '<div class="sens-row' + (d.id === state.ctx.dolor ? ' top' : '') + '">' +
+        '<span class="d"><b>' + esc(d.nombre) + '</b></span>' +
+        '<span class="r">' + esc(ff ? ff.nombre : '—') + '<em>fichaje</em></span>' +
+        '<span class="r">' + esc(pp ? pp.nombre : '—') + '<em>vacante crítica</em></span></div>';
+    }).join('') + '</div>';
   }
 
   function razonFichaje(f) {
@@ -373,63 +414,6 @@
     return 'Expediente ' + Math.round(e.evidencia || 0) + '/100 en evidencia, ' +
       (c.referencias || []).length + ' referencias y disponibilidad ' + esc((c.disponibilidad && c.disponibilidad.texto || 'sin dato').toLowerCase()) +
       '. Riesgo estimado ' + ni(f.riesgo) + '/100.';
-  }
-
-  function detalleFichaje(f) {
-    var cand = candById(f.id);
-    var p = puestoById(f.puesto);
-    if (!cand || !p) return '';
-    return '<section class="sec" id="plan"><div class="sec-head"><h2>El fichaje, en detalle</h2><span class="n">' + esc(cand.nombre) + '</span></div>' +
-      '<div class="ficha"><div>' +
-      '<div class="panel"><h3><span class="mono">A</span>Perfil del puesto frente a la persona</h3>' +
-      radarHTML(cand, p) +
-      '<div class="radar-legend"><span><i></i>Persona</span><span><i class="puesto"></i>Puesto</span></div></div>' +
-
-      '<div class="panel mt-24"><h3><span class="mono">B</span>Brechas frente al perfil</h3>' + gapsHTML(f) + '</div>' +
-      '<div class="panel mt-24"><h3><span class="mono">C</span>Salario</h3>' + salarioHTML(f, p, cand) + '</div>' +
-      '</div><div>' +
-      '<div class="panel"><h3><span class="mono">D</span>Plan de entrevista</h3>' + planHTML(f) + '</div>' +
-      '<div class="panel mt-24"><h3><span class="mono">E</span>Riesgos y bloqueos</h3>' + riesgosHTML(f) + '</div>' +
-      '<div class="panel mt-24"><h3><span class="mono">F</span>Atajos</h3>' +
-      '<div class="btn-row"><button class="btn btn--sm" data-cand="' + esc(cand.id) + '">Hoja de vida completa</button>' +
-      '<button class="btn btn--sm" data-puesto="' + esc(p.id) + '">Descripción del puesto</button></div></div>' +
-      '</div></div></section>';
-  }
-
-  /* -------------------------------- radar -------------------------------- */
-  function radarHTML(cand, p) {
-    var dims = DATA.dimensiones || [];
-    if (dims.length < 3) return breakdownHTML(cand.vector, p.perfil.niveles, true);
-    var W = 340, H = 320, cx = 170, cy = 156, R = 104;
-    var n = dims.length;
-    function ang(i) { return -Math.PI / 2 + i * 2 * Math.PI / n; }
-    function pt(v, i) { return [cx + Math.cos(ang(i)) * R * clamp(v, 0, 100) / 100, cy + Math.sin(ang(i)) * R * clamp(v, 0, 100) / 100]; }
-    function poly(vals) {
-      return dims.map(function (d, i) { return pt(vals[d.id] || 0, i).map(function (x) { return x.toFixed(1); }).join(','); }).join(' ');
-    }
-    var grid = [0.25, 0.5, 0.75, 1].map(function (k) {
-      var r = R * k;
-      var pts = dims.map(function (d, i) {
-        return (cx + Math.cos(ang(i)) * r).toFixed(1) + ',' + (cy + Math.sin(ang(i)) * r).toFixed(1);
-      }).join(' ');
-      return '<polygon class="grid" points="' + pts + '"></polygon>';
-    }).join('');
-    var axes = dims.map(function (d, i) {
-      var x = cx + Math.cos(ang(i)) * R, y = cy + Math.sin(ang(i)) * R;
-      return '<line class="axis" x1="' + cx + '" y1="' + cy + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '"></line>';
-    }).join('');
-    var labels = dims.map(function (d, i) {
-      var x = cx + Math.cos(ang(i)) * (R + 22);
-      var y = cy + Math.sin(ang(i)) * (R + 22);
-      var anchor = Math.abs(Math.cos(ang(i))) < 0.25 ? 'middle' : (Math.cos(ang(i)) > 0 ? 'start' : 'end');
-      return '<text x="' + x.toFixed(1) + '" y="' + (y + 3).toFixed(1) + '" text-anchor="' + anchor + '">' + esc((d.corto || d.nombre).toUpperCase()) + '</text>';
-    }).join('');
-    return '<svg class="radar" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Perfil de ' + esc(cand.nombre) + ' frente al puesto">' +
-      grid + axes +
-      '<polygon class="puesto" points="' + poly(p.perfil.niveles) + '"></polygon>' +
-      '<polygon class="cand" points="' + poly(cand.vector) + '"></polygon>' +
-      labels + '</svg>' +
-      '<p class="note">Línea continua: la persona. Línea discontinua: lo que pide el puesto.</p>';
   }
 
   function breakdownHTML(vector, req, compact) {
@@ -500,9 +484,7 @@
   VISTAS.puestos = function () {
     if (!DATA.puestos.length) return emptyView('No hay puestos cargados', 'Importa un conjunto de datos con al menos un puesto.');
     var sel = puestoById(state.puesto) || DATA.puestos[0];
-    return '<div class="hero"><div class="hero-top"><span class="folio">Puestos · ' + DATA.puestos.length + '</span><span class="folio">Descripción y perfil</span></div>' +
-      '<h1>Lo que hace el puesto y a quién busca.</h1>' +
-      '<p class="lead">Cada ficha tiene dos partes: la descripción del cargo y el perfil de la persona. Se pueden editar en el conjunto de datos.</p></div>' +
+    return pageHeadSimple('Puestos · ' + DATA.puestos.length, 'Puestos', 'Descripción y perfil de cada rol.') +
       '<div class="split"><div class="list">' + DATA.puestos.map(function (p) {
         var best = mejorDe(p.id);
         return '<button data-puesto="' + esc(p.id) + '" aria-current="' + (p.id === sel.id) + '">' +
@@ -619,9 +601,7 @@
   VISTAS.candidatos = function () {
     if (!DATA.candidatos.length) return emptyView('No hay candidatos cargados', 'Importa un conjunto de datos con al menos un candidato.');
     var c = candById(state.cand) || DATA.candidatos[0];
-    return '<div class="hero"><div class="hero-top"><span class="folio">Candidatos · ' + DATA.candidatos.length + '</span><span class="folio">Hoja de vida y lectura</span></div>' +
-      '<h1>El expediente y lo que el modelo ve en él.</h1>' +
-      '<p class="lead">Cada hoja de vida se lee junto al puesto al que aplica. Las notas del proceso no forman parte del CV.</p></div>' +
+    return pageHeadSimple('Candidatos · ' + DATA.candidatos.length, 'Candidatos', 'Hoja de vida y lectura del modelo.') +
       '<div class="split"><div class="list">' + D.filas.map(function (f) {
         return '<button data-cand="' + esc(f.id) + '" aria-current="' + (f.id === c.id) + '">' +
           '<b>' + esc(f.nombre) + '</b><span>' + esc(f.puestoNombre) + '</span>' +
@@ -647,19 +627,19 @@
       '<div class="cv-actions"><button class="btn btn--sm" data-export-cv="' + esc(c.id) + '">Descargar hoja de vida (.md)</button>' +
       '<button class="btn btn--sm btn--ghost" data-puesto="' + esc(f.puesto) + '">Ver puesto</button></div></div>' +
       '<div class="dossier-side">' +
-      '<div class="panel"><h3><span class="mono">A</span>Lectura del modelo</h3>' +
+      '<div class="panel"><h3>Lectura</h3>' +
       '<div class="kv"><div class="k"><span>Índice de contratación</span><b>' + nf(f.indice, 1) + '</b></div>' +
       '<div class="k"><span>Impacto sobre la vacante</span><b>' + nf(f.impacto, 1) + '</b></div>' +
       '<div class="k"><span>Potencial de entrevista</span><b>' + nf(f.potencial, 1) + '</b></div>' +
       '<div class="k"><span>Riesgo</span><b>' + nf(f.riesgo, 1) + '</b></div></div>' +
       '<div class="mt-16">' + breakdownHTML(c.vector, (puestoById(f.puesto).perfil || {}).niveles || {}, true) + '</div>' +
-      '<p class="note">Barra: la persona. Marca: el mínimo que pide el puesto.</p></div>' +
-      '<div class="panel"><h3><span class="mono">B</span>Brechas</h3>' + gapsHTML(f) + '</div>' +
-      '<div class="panel"><h3><span class="mono">C</span>Fortalezas</h3>' +
-      (f.fortalezas.length ? '<div class="chips">' + f.fortalezas.map(function (x) { return '<span class="chip chip--ok">' + esc(dim(x.dim).corto) + ' +' + x.dif + '</span>'; }).join('') + '</div>' : '<p class="small muted">Sin fortalezas destacadas.</p>') + '</div>' +
-      '<div class="panel"><h3><span class="mono">D</span>Plan de entrevista</h3>' + planHTML(f) + '</div>' +
-      '<div class="panel"><h3><span class="mono">E</span>Riesgos y bloqueos</h3>' + riesgosHTML(f) + '</div>' +
-      '<div class="panel"><h3><span class="mono">F</span>Salario</h3>' + salarioHTML(f, puestoById(f.puesto), c) + '</div>' +
+      '<p class="note">Barra: la persona. Marca: el mínimo del puesto.</p>' +
+      (f.fortalezas.length ? '<div class="chips mt-16">' + f.fortalezas.map(function (x) { return '<span class="chip chip--ok">' + esc(dim(x.dim).corto) + ' +' + x.dif + '</span>'; }).join('') + '</div>' : '') +
+      '</div>' +
+      '<div class="panel"><h3>Brechas</h3>' + gapsHTML(f) + '</div>' +
+      '<div class="panel"><h3>Entrevista</h3>' + planHTML(f) +
+      '<h4 class="tiny muted mt-16">Riesgos y bloqueos</h4>' + riesgosHTML(f) + '</div>' +
+      '<div class="panel"><h3>Condiciones</h3>' + salarioHTML(f, puestoById(f.puesto), c) + '</div>' +
       '</div></div>';
   }
 
@@ -705,9 +685,7 @@
           '<span class="v">' + nf(ev.fit, 1) + '</span>' + (f.puesto === p.id ? '<span class="s">aplica</span>' : '') + '</button>';
       }).join('');
     }).join('');
-    return '<div class="hero"><div class="hero-top"><span class="folio">Matriz · ' + D.filas.length + ' × ' + pos.length + '</span><span class="folio">Encaje de cada persona en cada puesto</span></div>' +
-      '<h1>Todos contra todos.</h1>' +
-      '<p class="lead">Sirve para ver polivalencia y planes B, no para comparar dificultad entre puestos. Cada columna se mide contra su propio perfil.</p></div>' +
+    return pageHeadSimple('Matriz · ' + D.filas.length + ' × ' + pos.length, 'Matriz', 'Encaje de cada persona en cada puesto.') +
       '<div class="matriz-wrap"><div class="matriz" style="grid-template-columns: 168px repeat(' + pos.length + ', minmax(78px, 1fr))">' + head + rows + '</div></div>' +
       '<div class="matriz-legend"><span>45</span><span class="scale"></span><span>100</span><span>· rojo: por debajo de 55</span></div>' +
       matrizDetalle();
@@ -744,10 +722,8 @@
   /* -------------------------------- datos -------------------------------- */
   VISTAS.datos = function () {
     var origen = leer(LS_DATA) ? 'Importado en este navegador' : 'Ejemplo incluido en la aplicación';
-    return '<div class="hero"><div class="hero-top"><span class="folio">Datos</span><span class="folio">' + esc((DATA.meta && DATA.meta.version) || 'v1') + '</span></div>' +
-      '<h1>Tu conjunto de datos, tu diagnóstico.</h1>' +
-      '<p class="lead">Todo lo que ves sale de un solo archivo JSON. Exporta el ejemplo, edítalo y vuelve a cargarlo con tus puestos y candidatos.</p></div>' +
-      '<section class="sec"><div class="sec-head"><h2>Conjunto activo</h2><span class="n">' + esc(origen) + '</span></div>' +
+    return pageHeadSimple('Datos · ' + esc(origen), 'Datos', 'Todo sale de un archivo JSON: expórtalo, edítalo y vuelve a cargarlo.') +
+      '<section class="sec">' +
       '<div class="datos-grid"><div class="datos-card"><h3>' + esc((DATA.empresa && DATA.empresa.nombre) || 'Sin nombre') + '</h3>' +
       '<table class="mini-tabla"><tbody>' +
       '<tr><td>Puestos</td><td>' + DATA.puestos.length + '</td></tr>' +
@@ -769,7 +745,7 @@
       (state.ok ? '<div class="ok-msg">' + esc(state.ok) + '</div>' : '') +
       '</div></div></section>' +
       '<section class="sec"><div class="sec-head"><h2>Qué necesita el archivo</h2><span class="n">Esquema</span></div>' +
-      '<div class="datos-card"><table class="mini-tabla"><thead><tr><th>Bloque</th><th>Obligatorio</th></tr></thead><tbody>' +
+      '<div class="datos-card"><table class="mini-tabla mini-tabla--text"><thead><tr><th>Bloque</th><th>Obligatorio</th></tr></thead><tbody>' +
       '<tr><td><b>empresa</b></td><td>nombre · cultura con un valor 0-100 por cada eje</td></tr>' +
       '<tr><td><b>dimensiones</b></td><td>id · nombre · corto · desc</td></tr>' +
       '<tr><td><b>culturaEjes</b></td><td>id · nombre · desc (opcional: peso)</td></tr>' +
@@ -786,60 +762,63 @@
   /* -------------------------------- método ------------------------------- */
   VISTAS.metodo = function () {
     var dims = (DATA.dimensiones || []).map(function (d) { return d.nombre; }).join(', ');
-    return '<div class="hero"><div class="hero-top"><span class="folio">Método</span><span class="folio">Cómo se calcula</span></div>' +
-      '<h1>Números explicables, no una caja negra.</h1>' +
-      '<p class="lead">Cada puntaje se puede reconstruir a mano. Si no estás de acuerdo con el orden, cambia el contexto o los pesos del archivo.</p></div>' +
+    return pageHeadSimple('Método', 'Método', 'Cómo se calcula y qué no hace.') +
       '<div class="metodo">' +
-      '<p>El modelo puntúa cada dimensión del puesto: <b>' + esc(dims) + '</b>. Para cada dimensión compara lo que la persona tiene con el mínimo que pide el puesto. Si está por debajo, castiga con una curva; si está muy por encima, suma poco, porque el sobreperfil también es un riesgo.</p>' +
-      '<div class="formula"><b>puntaje_dimensión</b> = 100 × (tiene / pide)<sup>1,35</sup> si tiene &lt; pide<br><b>puntaje_dimensión</b> = 100 + (tiene − pide) × 0,12 si tiene ≥ pide (máximo 104)</div>' +
-      '<p>El encaje del puesto es el promedio de esos puntajes, ponderado por la exigencia de cada dimensión (lo que pide 90 pesa más que lo que pide 20) y por el dolor declarado. Luego se descuentan los requisitos eliminatorios y el exceso salarial sobre la banda.</p>' +
-      '<div class="formula"><b>encaje</b> = Σ (peso_dimensión × puntaje) − bloqueos − exceso_salarial</div>' +
-      '<p>El índice de contratación mezcla cuatro cosas: el impacto del puesto (encaje × criticidad de la vacante), el match cultural, el potencial de entrevista y el riesgo. Los pesos cambian con la urgencia y con el peso que le des a la cultura.</p>' +
-      '<div class="formula"><b>índice</b> = ' + pct(D.pesos.impacto) + ' × impacto + ' + pct(D.pesos.cultura) + ' × cultura + ' + pct(D.pesos.potencial) + ' × potencial + ' + pct(D.pesos.riesgo) + ' × (100 − riesgo) − demora</div>' +
-      '<p><b>Criticidad del puesto</b> = 55% alineación con el dolor + 25% riesgo operativo si sigue vacante + 20% escasez del perfil en el mercado.</p>' +
-      '<p><b>Match cultural</b> = 100 − diferencia media absoluta entre los ejes de la persona y los de la empresa, ponderada. Se mide aparte, no contamina el encaje técnico.</p>' +
-      '<div class="metodo-grid"><div><h3>Lo que sí hace</h3><ul>' +
+      '<div class="metodo-grid">' +
+      '<div><h3>Puntaje por dimensión</h3>' +
+      '<div class="formula"><b>100 × (tiene / pide)<sup>1,35</sup></b> si tiene &lt; pide<br><b>100 + (tiene − pide) × 0,12</b> si tiene ≥ pide</div>' +
+      '<p class="small">Dimensiones: ' + esc(dims) + '. Por encima del mínimo suma poco: el sobreperfil también es un riesgo.</p></div>' +
+      '<div><h3>Encaje del puesto</h3>' +
+      '<div class="formula"><b>Σ (peso × puntaje) − bloqueos − exceso salarial</b></div>' +
+      '<p class="small">El peso depende de la exigencia de cada dimensión y del dolor declarado. Los requisitos eliminatorios y el salario fuera de banda descuentan.</p></div>' +
+      '<div><h3>Índice de contratación</h3>' +
+      '<div class="formula"><b>' + pct(D.pesos.impacto) + '</b> impacto · <b>' + pct(D.pesos.cultura) + '</b> cultura · <b>' + pct(D.pesos.potencial) + '</b> potencial · <b>' + pct(D.pesos.riesgo) + '</b> riesgo</div>' +
+      '<p class="small">El impacto es encaje × criticidad de la vacante. Los pesos cambian con la urgencia y con el peso de la cultura.</p></div>' +
+      '<div><h3>Criticidad y cultura</h3>' +
+      '<p class="small"><b>Criticidad</b> = 55% alineación con el dolor + 25% riesgo operativo + 20% escasez del perfil.</p>' +
+      '<p class="small"><b>Match cultural</b> = 100 − diferencia media entre los ejes de la persona y los de la empresa.</p></div>' +
+      '</div>' +
+      '<div class="metodo-grid">' +
+      '<div><h3>Lo que sí hace</h3><ul>' +
       '<li>Ordena la conversación y hace explícitos los supuestos.</li>' +
-      '<li>Muestra brechas concretas y preguntas para verificarlas.</li>' +
-      '<li>Recalcula todo si cambias el contexto de la empresa.</li>' +
-      '<li>Funciona con cualquier número de puestos, candidatos y dimensiones.</li></ul></div>' +
+      '<li>Muestra brechas y preguntas para verificarlas.</li>' +
+      '<li>Se recalcula con el contexto de la empresa.</li></ul></div>' +
       '<div><h3>Lo que no hace</h3><ul>' +
-      '<li>No verifica documentos ni referencias: eso es la entrevista.</li>' +
-      '<li>No mide a la persona, mide lo que el expediente declara.</li>' +
-      '<li>No decide por ti ni reemplaza el criterio del chef o del gerente.</li>' +
-      '<li>No compara dificultad entre puestos: cada uno tiene su propio perfil.</li></ul></div></div>' +
-      '<div class="callout"><b>Datos de ejemplo.</b> La empresa, las personas, los teléfonos y las cifras del conjunto incluido son ficticios. Si cargas datos reales, revisa quién tiene acceso al archivo: se guarda en este navegador y no se envía a ningún servidor.</div>' +
+      '<li>No verifica documentos ni referencias.</li>' +
+      '<li>No mide a la persona: mide lo que el expediente declara.</li>' +
+      '<li>No decide por ti.</li></ul></div></div>' +
+      '<div class="callout"><b>Datos de ejemplo.</b> Empresa, personas, teléfonos y cifras son ficticios. Si cargas datos reales, quedan guardados en este navegador.</div>' +
       '</div>';
   };
 
   /* ------------------------------- auxiliares ---------------------------- */
   function emptyView(t, s) {
-    return '<div class="hero"><div class="hero-top"><span class="folio">PASE</span><span class="folio">Sin datos</span></div>' +
-      '<h1>Falta el conjunto de datos.</h1><p class="lead">' + esc(s) + '</p></div>' +
-      '<section class="sec"><div class="empty"><h3>' + esc(t) + '</h3><p>' + esc(s) + '</p><button class="btn btn--solid" data-nav="datos">Ir a Datos</button></div></section>';
+    return pageHeadSimple('PASE', 'Sin datos', s) +
+      '<div class="empty"><h3>' + esc(t) + '</h3><p>' + esc(s) + '</p>' +
+      '<button class="btn btn--solid" data-nav="datos">Ir a Datos</button></div>';
   }
 
   /* -------------------------------- eventos ------------------------------ */
-  function actualizarHintDolor() {
-    var d = (DATA.dolores || []).filter(function (x) { return x.id === state.ctx.dolor; })[0];
-    var h = $('#dolorHint');
-    if (h && d) h.textContent = d.desc || '';
-  }
-
   function refresh() {
     compute();
     guardarCtx();
+    var ph = $('#pageHead');
+    if (ph) ph.outerHTML = pageHeadHTML();
+    var ch = $('#ctxChips');
+    if (ch) ch.outerHTML = chipsHTML();
     var box = $('#resultados');
-    if (box) {
-      box.innerHTML = resultadosHTML();
-      var pl = $('#pesosLinea');
-      if (pl) pl.innerHTML = pesosLinea();
-      var md = $('#metaDolor');
-      if (md) md.textContent = D.dolor ? D.dolor.nombre : 'sin definir';
-    } else {
-      render();
-    }
-    renderRail();
+    if (box) box.innerHTML = resultadosHTML();
+    var pl = $('#pesosLinea');
+    if (pl) pl.innerHTML = pesosLinea();
+  }
+
+  function resetCtx() {
+    borrar(LS_CTX);
+    state.ctx = ctxInicial();
+    compute();
+    guardarCtx();
+    render();
+    toast('Contexto restablecido');
   }
 
   function importar(texto) {
@@ -1025,7 +1004,7 @@
   /* ------------------------------- arranque ------------------------------ */
   function bind() {
     document.addEventListener('click', function (ev) {
-      var t = ev.target.closest('[data-nav],[data-cand],[data-puesto],[data-tab],[data-go],[data-export],[data-export-cv],[data-datos],[data-tema]');
+      var t = ev.target.closest('[data-nav],[data-cand],[data-puesto],[data-tab],[data-export],[data-export-cv],[data-datos],[data-tema],[data-ctx-toggle],[data-tab-resumen],[data-ctx-reset]');
       if (!t) return;
 
       if (t.hasAttribute('data-nav')) {
@@ -1035,6 +1014,16 @@
         return;
       }
       if (t.hasAttribute('data-tema')) { toggleTema(); return; }
+      if (t.hasAttribute('data-ctx-toggle')) { toggleCtx(); return; }
+      if (t.hasAttribute('data-ctx-reset')) { resetCtx(); return; }
+      if (t.hasAttribute('data-tab-resumen')) {
+        state.tabResumen = t.getAttribute('data-tab-resumen');
+        var box = $('#resultados');
+        if (box) box.innerHTML = resultadosHTML();
+        var nb = document.querySelector('[data-tab-resumen="' + state.tabResumen + '"]');
+        if (nb) nb.focus({ preventScroll: true });
+        return;
+      }
       if (t.hasAttribute('data-cand')) {
         state.cand = t.getAttribute('data-cand');
         state.vista = 'candidatos';
@@ -1050,11 +1039,6 @@
       if (t.hasAttribute('data-tab')) {
         state.tab = t.getAttribute('data-tab');
         render();
-        return;
-      }
-      if (t.getAttribute('data-go') === 'plan') {
-        var el = document.getElementById('plan');
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       if (t.hasAttribute('data-export-cv')) {
@@ -1091,7 +1075,6 @@
       var t = ev.target;
       if (t.matches('[data-ctx]')) {
         state.ctx[t.getAttribute('data-ctx')] = t.value;
-        if (t.getAttribute('data-ctx') === 'dolor') actualizarHintDolor();
         refresh();
         return;
       }

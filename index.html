@@ -13,40 +13,36 @@
 <body>
 
 <header class="top">
-  <div class="brand">
-    <b>PASE</b>
-    <span>diagnóstico de contratación</span>
-  </div>
-  <div class="top-mid">
-    <strong id="topEmpresa">—</strong>
-    <span class="dot" aria-hidden="true"></span>
-    <span id="topMeta">—</span>
+  <div class="top-left">
+    <span class="brand"><b>PASE</b></span>
+    <span class="crumb-sep">/</span>
+    <span class="workspace" id="topEmpresa">—</span>
   </div>
   <div class="top-actions">
-    <button class="btn btn--sm" type="button" data-export="copy" title="Copia el diagnóstico en texto">Copiar informe</button>
-    <button class="btn btn--sm" type="button" data-export="download" title="Descarga el diagnóstico en Markdown">Descargar .md</button>
-    <button class="btn btn--sm btn--ghost" type="button" data-nav="datos" title="Cargar o exportar datos">Datos</button>
-    <button class="btn btn--sm btn--ghost" type="button" data-tema="toggle" aria-label="Cambiar entre tema claro y oscuro">
-      <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.4v2.2M8 12.4v2.2M1.4 8h2.2M12.4 8h2.2M3.3 3.3l1.6 1.6M11.1 11.1l1.6 1.6M12.7 3.3l-1.6 1.6M4.9 11.1l-1.6 1.6"/></svg>
+    <button class="btn btn--sm" type="button" data-export="download" title="Descarga el diagnóstico en Markdown">Informe</button>
+    <button class="icon-btn" type="button" data-tema="toggle" aria-label="Cambiar entre tema claro y oscuro">
+      <svg class="ico ico-moon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z"/></svg>
+      <svg class="ico ico-sun" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.4v2.2M8 12.4v2.2M1.4 8h2.2M12.4 8h2.2M3.3 3.3l1.6 1.6M11.1 11.1l1.6 1.6M12.7 3.3l-1.6 1.6M4.9 11.1l-1.6 1.6"/></svg>
     </button>
   </div>
 </header>
 
 <div class="shell">
   <nav class="rail" aria-label="Secciones">
-    <div>
-      <p class="rail-label">Diagnóstico</p>
-      <div class="nav" id="nav">
-        <button type="button" data-nav="resumen"><span class="i">01</span><span>Resumen</span></button>
-        <button type="button" data-nav="puestos"><span class="i">02</span><span>Puestos</span></button>
-        <button type="button" data-nav="candidatos"><span class="i">03</span><span>Candidatos</span></button>
-        <button type="button" data-nav="matriz"><span class="i">04</span><span>Matriz</span></button>
-        <button type="button" data-nav="datos"><span class="i">05</span><span>Datos</span></button>
-        <button type="button" data-nav="metodo"><span class="i">06</span><span>Método</span></button>
-      </div>
+    <div class="nav" id="nav">
+      <button type="button" data-nav="resumen" aria-current="page">Resumen</button>
+      <button type="button" data-nav="puestos">Puestos</button>
+      <button type="button" data-nav="candidatos">Candidatos</button>
+      <button type="button" data-nav="matriz">Matriz</button>
     </div>
-    <div class="rail-card" id="railResumen"></div>
-    <p class="rail-note" id="railNota">Contenido de demostración. El diagnóstico ordena la conversación; no decide por ti.</p>
+    <div class="nav nav--sub" id="navSub">
+      <button type="button" data-nav="datos">Datos</button>
+      <button type="button" data-nav="metodo">Método</button>
+    </div>
+    <div class="ws-foot">
+      <span class="ws-meta" id="wsMeta">—</span>
+      <span class="ws-badge" id="wsBadge" title="Contenido ficticio de demostración">Datos de ejemplo</span>
+    </div>
   </nav>
 
   <main class="main">
