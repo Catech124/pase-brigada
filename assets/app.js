@@ -20,6 +20,7 @@
     puesto: null,
     tab: 'descripcion',
     ctxOpen: false,
+    analysisOpen: false,
     matriz: null,
     ctx: {},
     errores: [],
@@ -60,10 +61,6 @@
     var p = String(n || '').split(' ').filter(Boolean);
     return p.length > 1 ? p[0] + ' ' + p[p.length - 1] : p[0] || '';
   }
-  function fechaHoy() {
-    return new Date().toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  }
-
   function fecha() {
     var f = DATA.meta && DATA.meta.actualizado ? new Date(DATA.meta.actualizado + 'T12:00:00') : new Date();
     return f.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -179,26 +176,6 @@
       '</div></div>';
   }
 
-  function pageHeadHTML() {
-    if (!D || D.vacio) {
-      return pageHeadSimple('Diagnóstico', 'Sin datos', 'Carga un conjunto con al menos un puesto y un candidato.');
-    }
-    var f = D.veredictos.contratacion;
-    var margen = D.margenIndice < 3
-      ? 'empate técnico con el segundo'
-      : nf(D.margenIndice, 1) + ' puntos sobre el segundo';
-    return '<div class="page-head" id="pageHead">' +
-      '<div class="page-head-main">' +
-      '<p class="page-kicker">Recomendación</p>' +
-      '<h1>Fichar a ' + esc(f.nombre) + '</h1>' +
-      '<p class="page-sub">' + esc(f.puestoNombre) + ' · ' + margen + '</p>' +
-      '</div>' +
-      '<div class="page-actions">' +
-      '<div class="head-score">' + ni(f.indice) + '<small>/100</small></div>' +
-      '<button class="btn btn--solid" type="button" data-cand="' + esc(f.id) + '">Ver ficha</button>' +
-      '</div></div>';
-  }
-
   function contextLineHTML() {
     var c = state.ctx;
     var dol = (DATA.dolores || []).filter(function (d) { return d.id === c.dolor; })[0] || {};
@@ -271,17 +248,40 @@
   var VISTAS = {};
 
   VISTAS.resumen = function () {
-    return pageHeadHTML() + contextLineHTML() + ctxPanelHTML() +
-      '<div id="resultados">' + resultadosHTML() + '</div>';
+    return '<div id="hero">' + heroHTML() + '</div>' +
+      contextLineHTML() + ctxPanelHTML() +
+      '<div id="analysis" class="analysis"' + (state.analysisOpen ? '' : ' hidden') + '>' + analysisHTML() + '</div>';
   };
 
-  function resultadosHTML() {
+  function heroHTML() {
     if (!D || D.vacio) {
       return '<div class="empty"><h3>Faltan datos para diagnosticar</h3>' +
         '<p>' + esc(D ? D.motivo : 'No se pudo calcular el diagnóstico.') + '</p>' +
         '<button class="btn btn--solid" data-nav="datos">Ir a Datos</button></div>';
     }
-    return whyPanelHTML() + signalsHTML() + tieHTML() + nextStepHTML() + linksHTML();
+    var f = D.veredictos.contratacion;
+    var margen = D.margenIndice < 3
+      ? 'empate técnico con el segundo'
+      : nf(D.margenIndice, 1) + ' puntos sobre el segundo';
+    return '<section class="decision-hero">' +
+      '<div class="dh-left">' +
+      '<span class="dh-label">Recomendación</span>' +
+      '<h1>Fichar a ' + esc(f.nombre) + '</h1>' +
+      '<p class="dh-role">' + esc(f.puestoNombre) + ' · ' + margen + '</p>' +
+      '<p class="dh-why">' + esc(razonCorta(f)) + '</p>' +
+      '</div>' +
+      '<div class="dh-right">' +
+      '<div class="dh-score">' + ni(f.indice) + '<small>/100</small></div>' +
+      '<div class="dh-actions">' +
+      '<button class="btn btn--solid" type="button" data-cand="' + esc(f.id) + '">Ver ficha</button>' +
+      '<button class="btn btn--ghost" type="button" data-analysis aria-expanded="' + (state.analysisOpen ? 'true' : 'false') + '">' +
+      (state.analysisOpen ? 'Ocultar análisis' : 'Ver análisis') + '</button>' +
+      '</div></div></section>';
+  }
+
+  function analysisHTML() {
+    if (!D || D.vacio) return '';
+    return signalsHTML() + tieHTML() + nextStepHTML() + linksHTML();
   }
 
   function razonCorta(f) {
@@ -289,11 +289,6 @@
     return fort
       ? 'Ventaja en ' + dim(fort.dim).nombre.toLowerCase() + ' (+' + fort.dif + ').'
       : 'Cumple el perfil sin sobrecosto.';
-  }
-
-  function whyPanelHTML() {
-    var f = D.veredictos.contratacion;
-    return '<p class="why-line">' + esc(razonCorta(f)) + ' Cubrir su vacante vale ' + ni(f.impacto) + ' de 100.</p>';
   }
 
   function signalsHTML() {
@@ -759,12 +754,12 @@
   function refresh() {
     compute();
     guardarCtx();
-    var ph = $('#pageHead');
-    if (ph) ph.outerHTML = pageHeadHTML();
+    var h = $('#hero');
+    if (h) h.innerHTML = heroHTML();
     var cl = $('.context-line');
     if (cl) cl.outerHTML = contextLineHTML();
-    var box = $('#resultados');
-    if (box) box.innerHTML = resultadosHTML();
+    var an = $('#analysis');
+    if (an) an.innerHTML = analysisHTML();
     var pl = $('#pesosLinea');
     if (pl) pl.innerHTML = pesosLinea();
   }
@@ -961,7 +956,7 @@
   /* ------------------------------- arranque ------------------------------ */
   function bind() {
     document.addEventListener('click', function (ev) {
-      var t = ev.target.closest('[data-nav],[data-cand],[data-puesto],[data-tab],[data-export],[data-export-cv],[data-datos],[data-tema],[data-ctx-toggle],[data-ctx-reset]');
+      var t = ev.target.closest('[data-nav],[data-cand],[data-puesto],[data-tab],[data-export],[data-export-cv],[data-datos],[data-tema],[data-ctx-toggle],[data-ctx-reset],[data-analysis]');
       if (!t) return;
 
       if (t.hasAttribute('data-nav')) {
@@ -972,6 +967,14 @@
       }
       if (t.hasAttribute('data-tema')) { toggleTema(); return; }
       if (t.hasAttribute('data-ctx-toggle')) { toggleCtx(); return; }
+      if (t.hasAttribute('data-analysis')) {
+        state.analysisOpen = !state.analysisOpen;
+        var an = $('#analysis');
+        if (an) an.hidden = !state.analysisOpen;
+        t.textContent = state.analysisOpen ? 'Ocultar análisis' : 'Ver análisis';
+        t.setAttribute('aria-expanded', state.analysisOpen ? 'true' : 'false');
+        return;
+      }
       if (t.hasAttribute('data-ctx-reset')) { resetCtx(); return; }
       if (t.hasAttribute('data-cand')) {
         state.cand = t.getAttribute('data-cand');

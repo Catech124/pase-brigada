@@ -93,11 +93,13 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   informe.empresa = await evaluate("document.getElementById('topEmpresa').textContent");
   informe.nav = await evaluate("document.querySelectorAll('#nav [data-nav], #navSub [data-nav]').length");
   informe.signals = await evaluate("document.querySelectorAll('.signal').length");
-  informe.why = await evaluate("document.querySelectorAll('.why-line').length");
+  informe.why = await evaluate("document.querySelectorAll('.decision-hero').length");
 
   await capturar('01-resumen-top');
-  await capturarEn('02-resumen-porque', '.why-line');
-  await capturarEn('03-resumen-senales', '.signals');
+  await capturarEn('02-resumen-tarjeta', '.decision-hero');
+  await evaluate("var b=document.querySelector('[data-analysis]'); if(b) b.click();");
+  await wait(400);
+  await capturarEn('03-resumen-analisis', '.signals');
   await capturarEn('04-resumen-siguiente', '.next-step');
 
   const vistas = ['puestos', 'candidatos', 'matriz', 'datos', 'metodo'];
@@ -114,23 +116,24 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await wait(300);
   await evaluate("var s=document.querySelector('[data-ctx=\"dolor\"]'); s.value='creatividad'; s.dispatchEvent(new Event('change',{bubbles:true}))");
   await wait(500);
-  informe.dolor = await evaluate("document.querySelector('#brief select').value");
-  informe.trasCambio = await evaluate("document.querySelector('.page-head h1').textContent");
+  informe.dolor = await evaluate("document.querySelector('[data-ctx=\"dolor\"]').value");
+  informe.trasCambio = await evaluate("document.querySelector('.decision-hero h1').textContent");
   informe.criticaTrasCambio = await evaluate("document.querySelectorAll('.signal')[0].querySelector('.s-name').textContent");
-  await capturarEn('10-resumen-creatividad', '.why-line');
+  await capturarEn('10-resumen-creatividad', '.decision-hero');
 
   await evaluate("document.querySelector('[data-tema]').click()");
   await wait(400);
   informe.tema = await evaluate("document.documentElement.getAttribute('data-theme')");
   await capturar('11-oscuro');
 
+  await evaluate("var b=document.querySelector('[data-analysis]'); if(b && b.getAttribute('aria-expanded')==='true') b.click();");
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
   await wait(500);
   informe.movil = await evaluate("(function(){var r=document.querySelector('.rail'),t=document.querySelector('.top');var cs=getComputedStyle(r);return {scrollY:window.scrollY,rail:r.getBoundingClientRect().toJSON(),top:t.getBoundingClientRect().toJSON(),pos:cs.position,height:cs.height,flex:cs.flexDirection,vw:innerWidth};})()");
   await evaluate("window.scrollTo(0,0)");
   await wait(400);
   await capturar('12-movil');
-  await capturarEn('13-movil-veredictos', '.veredictos');
+  await capturarEn('13-movil-tarjeta', '.decision-hero');
 
   const mini = {
     meta: { version: 'test', actualizado: '2026-11-03', aviso: 'Conjunto de prueba.' },

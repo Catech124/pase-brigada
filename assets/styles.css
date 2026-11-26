@@ -1129,3 +1129,41 @@ details.schema .datos-card { margin-top: 14px; }
   padding: 15px 0; border-bottom: 1px solid var(--line);
   font-size: 13px; color: var(--ink-2); line-height: 1.5; max-width: 74ch;
 }
+
+/* --------------------------- portada: una tarjeta ------------------------ */
+.decision-hero {
+  background: var(--invert-bg); color: var(--invert-ink);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px;
+  align-items: end; padding: 30px 32px 28px;
+}
+.dh-left { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; min-width: 0; }
+.dh-label {
+  font-family: var(--mono); font-size: 8.5px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--invert-ink-2);
+}
+.dh-left h1 {
+  font-size: clamp(26px, 3.2vw, 36px); line-height: 1.06;
+  letter-spacing: -.03em; font-weight: 600; margin: 0;
+}
+.dh-role { font-size: 12.5px; color: var(--invert-ink-2); }
+.dh-why { font-size: 13px; color: var(--invert-ink); max-width: 62ch; }
+.dh-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+.dh-score { font-family: var(--mono); font-size: 52px; line-height: 1; letter-spacing: -.03em; }
+.dh-score small { font-size: 12px; color: var(--invert-ink-2); margin-left: 2px; }
+.dh-actions { display: flex; gap: 8px; }
+.decision-hero .btn--solid { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.decision-hero .btn--ghost { color: var(--invert-ink); border-color: rgba(255, 255, 255, .22); }
+.decision-hero .btn--ghost:hover { background: rgba(255, 255, 255, .08); }
+html[data-theme='dark'] .decision-hero .btn--ghost { border-color: rgba(16, 21, 18, .25); }
+html[data-theme='dark'] .decision-hero .btn--ghost:hover { background: rgba(16, 21, 18, .07); }
+
+.analysis { margin-top: 2px; }
+.analysis[hidden] { display: none; }
+
+@media (max-width: 860px) {
+  .decision-hero { grid-template-columns: 1fr; gap: 18px; padding: 22px 18px 20px; }
+  .dh-right { align-items: flex-start; }
+  .dh-score { font-size: 42px; }
+  .dh-actions { width: 100%; }
+  .dh-actions .btn { flex: 1; justify-content: center; }
+}
