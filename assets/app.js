@@ -19,7 +19,6 @@
     cand: null,
     puesto: null,
     tab: 'descripcion',
-    tabResumen: 'ranking',
     ctxOpen: false,
     matriz: null,
     ctx: {},
@@ -156,9 +155,6 @@
   /* ------------------------------- armazón ------------------------------- */
   function render() {
     $('#topEmpresa').textContent = (DATA.empresa && DATA.empresa.nombre) || 'Sin nombre';
-    $('#wsMeta').textContent = DATA.puestos.length + ' puestos · ' + DATA.candidatos.length + ' candidatos';
-    var badge = $('#wsBadge');
-    if (badge) badge.textContent = leer(LS_DATA) ? 'Datos importados' : 'Datos de ejemplo';
     renderNav();
     var v = $('#vista');
     v.innerHTML = VISTAS[state.vista] ? VISTAS[state.vista]() : VISTAS.resumen();
@@ -193,7 +189,7 @@
       : nf(D.margenIndice, 1) + ' puntos sobre el segundo';
     return '<div class="page-head" id="pageHead">' +
       '<div class="page-head-main">' +
-      '<p class="page-kicker">Diagnóstico · ' + fechaHoy() + '</p>' +
+      '<p class="page-kicker">Recomendación</p>' +
       '<h1>Fichar a ' + esc(f.nombre) + '</h1>' +
       '<p class="page-sub">' + esc(f.puestoNombre) + ' · ' + margen + '</p>' +
       '</div>' +
@@ -203,18 +199,18 @@
       '</div></div>';
   }
 
-  function chipsHTML() {
+  function contextLineHTML() {
     var c = state.ctx;
     var dol = (DATA.dolores || []).filter(function (d) { return d.id === c.dolor; })[0] || {};
     var pres = { ajustado: 'Ajustado', estandar: 'Estándar', amplio: 'Amplio' }[c.presupuesto] || c.presupuesto;
-    return '<div class="context-bar" id="ctxChips">' +
-      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Dolor</span><b>' + esc(dol.nombre || '—') + '</b></button>' +
-      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Presupuesto</span><b>' + esc(pres) + '</b></button>' +
-      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Urgencia</span><b>' + c.urgencia + '</b></button>' +
-      '<button class="ctx-chip" type="button" data-ctx-toggle><span>Cultura</span><b>' + c.culturaPeso + '</b></button>' +
-      '<button class="ctx-toggle btn btn--ghost btn--sm" type="button" data-ctx-toggle aria-expanded="' + (state.ctxOpen ? 'true' : 'false') + '">' +
-      (state.ctxOpen ? 'Cerrar' : 'Ajustar') + '</button>' +
-      '</div>';
+    return '<button class="context-line" type="button" data-ctx-toggle aria-expanded="' + (state.ctxOpen ? 'true' : 'false') + '">' +
+      '<span class="cl-label">Contexto</span>' +
+      '<span class="cl-value">' + esc(dol.nombre || '—') + '</span>' +
+      '<span class="cl-sep">·</span><span class="cl-value">' + esc(pres) + '</span>' +
+      '<span class="cl-sep">·</span><span class="cl-value">Urgencia ' + c.urgencia + '</span>' +
+      '<span class="cl-sep">·</span><span class="cl-value">Cultura ' + c.culturaPeso + '</span>' +
+      '<span class="cl-action" id="ctxToggleLabel">' + (state.ctxOpen ? 'Cerrar' : 'Cambiar') + '</span>' +
+      '</button>';
   }
 
   function ctxPanelHTML() {
@@ -265,18 +261,17 @@
     state.ctxOpen = !state.ctxOpen;
     var p = $('#ctxPanel');
     if (p) p.classList.toggle('open', state.ctxOpen);
-    var b = $('.ctx-toggle');
-    if (b) {
-      b.textContent = state.ctxOpen ? 'Cerrar' : 'Ajustar';
-      b.setAttribute('aria-expanded', state.ctxOpen ? 'true' : 'false');
-    }
+    var l = $('#ctxToggleLabel');
+    if (l) l.textContent = state.ctxOpen ? 'Cerrar' : 'Cambiar';
+    var line = $('.context-line');
+    if (line) line.setAttribute('aria-expanded', state.ctxOpen ? 'true' : 'false');
   }
 
   /* -------------------------------- vistas -------------------------------- */
   var VISTAS = {};
 
   VISTAS.resumen = function () {
-    return pageHeadHTML() + chipsHTML() + ctxPanelHTML() +
+    return pageHeadHTML() + contextLineHTML() + ctxPanelHTML() +
       '<div id="resultados">' + resultadosHTML() + '</div>';
   };
 
@@ -286,41 +281,57 @@
         '<p>' + esc(D ? D.motivo : 'No se pudo calcular el diagnóstico.') + '</p>' +
         '<button class="btn btn--solid" data-nav="datos">Ir a Datos</button></div>';
     }
-    return decisionsHTML() + tieHTML() + tabsHTML();
-  }
-
-  function decisionsHTML() {
-    var f = D.veredictos.contratacion;
-    var p = D.veredictos.criticidad;
-    var cul = D.veredictos.cultura;
-    var ent = D.veredictos.entrevista;
-    return '<div class="decisions">' +
-      '<article class="decision decision--primary">' +
-      '<span class="d-label">Fichaje recomendado</span>' +
-      '<span class="d-name">' + esc(f.nombre) + '</span>' +
-      '<span class="d-role">' + esc(f.puestoNombre) + (f.asignadoAuto ? ' · asignado automáticamente' : '') + '</span>' +
-      '<span class="d-meta">Encaje ' + ni(f.fit) + ' · Cultura ' + ni(f.cultura) + ' · Entrevista ' + ni(f.prioridad) + '</span>' +
-      '<span class="d-why">' + esc(razonCorta(f)) + '</span>' +
-      '</article>' +
-      decisionMini('Vacante crítica', p.nombre, p.criticidad, p.vacanteDias + ' días abierta', 'data-puesto="' + esc(p.id) + '"') +
-      decisionMini('Match cultural', cul.nombre, cul.cultura, cul.puestoNombre, 'data-cand="' + esc(cul.id) + '"') +
-      decisionMini('Entrevistar primero', ent.nombre, ent.prioridad, 'Expediente ' + ni(ent.potencial), 'data-cand="' + esc(ent.id) + '"') +
-      '</div>';
+    return whyPanelHTML() + signalsHTML() + tieHTML() + nextStepHTML() + linksHTML();
   }
 
   function razonCorta(f) {
     var fort = f.fortalezas[0];
-    return (fort ? dim(fort.dim).nombre + ' +' + fort.dif : 'Cumple el perfil') + ' · impacto ' + ni(f.impacto);
+    return fort
+      ? 'Ventaja en ' + dim(fort.dim).nombre.toLowerCase() + ' (+' + fort.dif + ').'
+      : 'Cumple el perfil sin sobrecosto.';
   }
 
-  function decisionMini(label, name, score, meta, attr) {
-    return '<article class="decision">' +
-      '<span class="d-label">' + esc(label) + '</span>' +
-      '<span class="d-name">' + esc(name) + '</span>' +
-      '<span class="d-score">' + nf(score, 1) + '</span>' +
-      '<span class="d-meta">' + esc(meta) + '</span>' +
-      '<button class="d-link" type="button" ' + attr + '>Ver →</button>' +
-      '</article>';
+  function whyPanelHTML() {
+    var f = D.veredictos.contratacion;
+    return '<p class="why-line">' + esc(razonCorta(f)) + ' Cubrir su vacante vale ' + ni(f.impacto) + ' de 100.</p>';
+  }
+
+  function signalsHTML() {
+    var p = D.veredictos.criticidad;
+    var cul = D.veredictos.cultura;
+    var ent = D.veredictos.entrevista;
+    return '<div class="signals">' +
+      signalHTML('Vacante crítica', p.nombre, p.criticidad, 'data-puesto="' + esc(p.id) + '"') +
+      signalHTML('Match cultural', cul.nombre, cul.cultura, 'data-cand="' + esc(cul.id) + '"') +
+      signalHTML('Entrevistar primero', ent.nombre, ent.prioridad, 'data-cand="' + esc(ent.id) + '"') +
+      '</div>';
+  }
+
+  function signalHTML(label, name, score, attr) {
+    return '<button class="signal" type="button" ' + attr + '>' +
+      '<span class="s-label">' + esc(label) + '</span>' +
+      '<span class="s-name">' + esc(name) + '</span>' +
+      '<span class="s-score">' + nf(score, 1) + '</span>' +
+      '</button>';
+  }
+
+  function nextStepHTML() {
+    var f = D.veredictos.contratacion;
+    var items = planItems(f);
+    var q = items.length ? items[0].q : 'Revisar la hoja de vida y las brechas.';
+    return '<div class="next-step">' +
+      '<div><span class="ns-label">Siguiente paso</span>' +
+      '<p class="ns-text">Entrevistar a ' + esc(nombreCorto(f.nombre)) + ': ' + esc(q) + '</p></div>' +
+      '<button class="btn btn--sm" type="button" data-cand="' + esc(f.id) + '">Ver plan</button>' +
+      '</div>';
+  }
+
+  function linksHTML() {
+    return '<div class="resumen-links">' +
+      '<button class="link-mono" type="button" data-nav="candidatos">Ranking completo →</button>' +
+      '<button class="link-mono" type="button" data-nav="puestos">Vacantes y criticidad →</button>' +
+      '<button class="link-mono" type="button" data-nav="metodo">Cómo se calcula →</button>' +
+      '</div>';
   }
 
   function tieHTML() {
@@ -328,62 +339,6 @@
     var porCultura = D.filas.slice().sort(function (a, b) { return b.cultura - a.cultura; });
     return '<p class="note-tie"><b>Empate en cultura:</b> ' + esc(porCultura[0].nombre) + ' (' + nf(porCultura[0].cultura, 1) + ') y ' +
       esc(porCultura[1].nombre) + ' (' + nf(porCultura[1].cultura, 1) + ') están a ' + nf(D.margenCultura, 1) + ' puntos. Decide la entrevista.</p>';
-  }
-
-  function tabsHTML() {
-    var tabs = [
-      { id: 'ranking', label: 'Ranking', n: D.filas.length },
-      { id: 'vacantes', label: 'Vacantes', n: D.rankingPuestos.length },
-      { id: 'escenarios', label: 'Escenarios', n: (DATA.dolores || []).length }
-    ];
-    return '<div class="tabs-seg" role="tablist">' +
-      tabs.map(function (t) {
-        return '<button type="button" role="tab" aria-selected="' + (state.tabResumen === t.id) + '" data-tab-resumen="' + t.id + '">' +
-          esc(t.label) + '<span>' + t.n + '</span></button>';
-      }).join('') + '</div>' +
-      '<div class="tab-panel" role="tabpanel">' + panelHTML(state.tabResumen) + '</div>';
-  }
-
-  function panelHTML(id) {
-    if (id === 'vacantes') return panelVacantes();
-    if (id === 'escenarios') return panelEscenarios();
-    return panelRanking();
-  }
-
-  function panelRanking() {
-    return '<div class="rank-head"><span></span><span>Candidato</span><span>Índice</span><span>Encaje</span><span>Cultura</span><span></span></div>' +
-      '<ol class="rank">' + D.filas.map(function (x) {
-        return '<li><button class="rank-row" data-cand="' + esc(x.id) + '">' +
-          '<span class="pos">' + x.posicion + '</span>' +
-          '<span class="who"><b>' + esc(x.nombre) + '</b><span>' + esc(x.puestoNombre) + '</span>' +
-          '<span class="mini-bar"><i style="width:' + clamp(x.indice, 0, 100) + '%"></i></span></span>' +
-          '<span class="metric"><b>' + nf(x.indice, 1) + '</b></span>' +
-          '<span class="metric"><b>' + nf(x.fit, 1) + '</b></span>' +
-          '<span class="metric"><b>' + nf(x.cultura, 1) + '</b></span>' +
-          '<span class="arrow">→</span></button></li>';
-      }).join('') + '</ol>';
-  }
-
-  function panelVacantes() {
-    return '<div class="crit-list">' + D.rankingPuestos.map(function (x) {
-      return '<button class="crit-row" data-puesto="' + esc(x.id) + '">' +
-        '<span class="name"><b>' + esc(x.nombre) + '</b><span>' + x.vacanteDias + ' días abierta · ' + money(x.banda[0]) + ' a ' + money(x.banda[1]) + '</span></span>' +
-        '<span class="track-wrap"><span class="track"><i style="width:' + clamp(x.criticidad, 0, 100) + '%"></i></span>' +
-        '<span class="crit-comp"><span>alin ' + ni(x.critComponentes.alineacion) + '</span><span>riesgo ' + ni(x.critComponentes.riesgo) + '</span><span>escasez ' + ni(x.critComponentes.escasez) + '</span></span></span>' +
-        '<span class="val">' + nf(x.criticidad, 1) + '</span></button>';
-    }).join('') + '</div>';
-  }
-
-  function panelEscenarios() {
-    return '<div class="sens">' + (DATA.dolores || []).map(function (d) {
-      var r = d.id === state.ctx.dolor ? D : M.diagnosticar(DATA, Object.assign({}, state.ctx, { dolor: d.id }));
-      var ff = r.veredictos && r.veredictos.contratacion;
-      var pp = r.veredictos && r.veredictos.criticidad;
-      return '<div class="sens-row' + (d.id === state.ctx.dolor ? ' top' : '') + '">' +
-        '<span class="d"><b>' + esc(d.nombre) + '</b></span>' +
-        '<span class="r">' + esc(ff ? ff.nombre : '—') + '<em>fichaje</em></span>' +
-        '<span class="r">' + esc(pp ? pp.nombre : '—') + '<em>vacante crítica</em></span></div>';
-    }).join('') + '</div>';
   }
 
   function razonFichaje(f) {
@@ -486,10 +441,10 @@
     var sel = puestoById(state.puesto) || DATA.puestos[0];
     return pageHeadSimple('Puestos · ' + DATA.puestos.length, 'Puestos', 'Descripción y perfil de cada rol.') +
       '<div class="split"><div class="list">' + DATA.puestos.map(function (p) {
-        var best = mejorDe(p.id);
+        var cp = D.puestos.filter(function (x) { return x.id === p.id; })[0];
         return '<button data-puesto="' + esc(p.id) + '" aria-current="' + (p.id === sel.id) + '">' +
           '<b>' + esc(p.nombre) + '</b><span>' + esc([p.area, p.nivel].filter(Boolean).join(' · ')) + '</span>' +
-          '<span class="fit">' + (best ? 'Mejor: ' + esc(nombreCorto(best.nombre)) + ' · ' + nf(best.fit, 1) : 'Sin candidatos') + '</span></button>';
+          '<span class="fit">Prioridad ' + (cp ? Math.round(cp.criticidad) : '—') + ' · ' + p.vacanteDias + ' días</span></button>';
       }).join('') + '</div><div>' + puestoDetalle(sel) + '</div></div>';
   };
 
@@ -611,6 +566,7 @@
 
   function candidatoDetalle(c) {
     var f = D.porId[c.id];
+    var p = puestoById(f.puesto);
     return '<div class="cand-head"><div><h2>' + esc(c.nombre) + '</h2>' +
       '<p class="role">' + esc(c.titular || '') + '</p>' +
       (c.titulo ? '<p class="grado">' + esc(c.titulo) + '</p>' : '') +
@@ -635,11 +591,12 @@
       '<div class="mt-16">' + breakdownHTML(c.vector, (puestoById(f.puesto).perfil || {}).niveles || {}, true) + '</div>' +
       '<p class="note">Barra: la persona. Marca: el mínimo del puesto.</p>' +
       (f.fortalezas.length ? '<div class="chips mt-16">' + f.fortalezas.map(function (x) { return '<span class="chip chip--ok">' + esc(dim(x.dim).corto) + ' +' + x.dif + '</span>'; }).join('') + '</div>' : '') +
+      '<p class="note">Expectativa ' + money(c.expectativa) + ' · banda ' + money(p.banda[0]) + ' a ' + money(p.banda[1]) +
+      (f.salario.exceso > 0 ? ' · +' + nf(f.salario.exceso, 1) + '% sobre el tope' : '') + '</p>' +
       '</div>' +
       '<div class="panel"><h3>Brechas</h3>' + gapsHTML(f) + '</div>' +
       '<div class="panel"><h3>Entrevista</h3>' + planHTML(f) +
       '<h4 class="tiny muted mt-16">Riesgos y bloqueos</h4>' + riesgosHTML(f) + '</div>' +
-      '<div class="panel"><h3>Condiciones</h3>' + salarioHTML(f, puestoById(f.puesto), c) + '</div>' +
       '</div></div>';
   }
 
@@ -744,7 +701,7 @@
       (state.errores.length ? '<div class="errores"><b>No se pudo cargar:</b><ul>' + state.errores.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') + '</ul></div>' : '') +
       (state.ok ? '<div class="ok-msg">' + esc(state.ok) + '</div>' : '') +
       '</div></div></section>' +
-      '<section class="sec"><div class="sec-head"><h2>Qué necesita el archivo</h2><span class="n">Esquema</span></div>' +
+      '<details class="schema"><summary>Qué necesita el archivo</summary>' +
       '<div class="datos-card"><table class="mini-tabla mini-tabla--text"><thead><tr><th>Bloque</th><th>Obligatorio</th></tr></thead><tbody>' +
       '<tr><td><b>empresa</b></td><td>nombre · cultura con un valor 0-100 por cada eje</td></tr>' +
       '<tr><td><b>dimensiones</b></td><td>id · nombre · corto · desc</td></tr>' +
@@ -756,7 +713,7 @@
       '<tr><td><b>preguntas</b></td><td>opcional: una lista de preguntas por dimensión</td></tr>' +
       '<tr><td><b>preguntasCultura</b></td><td>opcional: una pregunta por eje</td></tr>' +
       '</tbody></table>' +
-      '<p class="note">Los candidatos sin <b>puestoAplicado</b> se evalúan contra todos y se les asigna el de mayor encaje. Las dimensiones pueden ser otras: el motor se adapta a las que definas.</p></div></section>';
+      '<p class="note">Los candidatos sin <b>puestoAplicado</b> se evalúan contra todos y se les asigna el de mayor encaje. Las dimensiones pueden ser otras: el motor se adapta a las que definas.</p></div></details>';
   };
 
   /* -------------------------------- método ------------------------------- */
@@ -804,8 +761,8 @@
     guardarCtx();
     var ph = $('#pageHead');
     if (ph) ph.outerHTML = pageHeadHTML();
-    var ch = $('#ctxChips');
-    if (ch) ch.outerHTML = chipsHTML();
+    var cl = $('.context-line');
+    if (cl) cl.outerHTML = contextLineHTML();
     var box = $('#resultados');
     if (box) box.innerHTML = resultadosHTML();
     var pl = $('#pesosLinea');
@@ -1004,7 +961,7 @@
   /* ------------------------------- arranque ------------------------------ */
   function bind() {
     document.addEventListener('click', function (ev) {
-      var t = ev.target.closest('[data-nav],[data-cand],[data-puesto],[data-tab],[data-export],[data-export-cv],[data-datos],[data-tema],[data-ctx-toggle],[data-tab-resumen],[data-ctx-reset]');
+      var t = ev.target.closest('[data-nav],[data-cand],[data-puesto],[data-tab],[data-export],[data-export-cv],[data-datos],[data-tema],[data-ctx-toggle],[data-ctx-reset]');
       if (!t) return;
 
       if (t.hasAttribute('data-nav')) {
@@ -1016,14 +973,6 @@
       if (t.hasAttribute('data-tema')) { toggleTema(); return; }
       if (t.hasAttribute('data-ctx-toggle')) { toggleCtx(); return; }
       if (t.hasAttribute('data-ctx-reset')) { resetCtx(); return; }
-      if (t.hasAttribute('data-tab-resumen')) {
-        state.tabResumen = t.getAttribute('data-tab-resumen');
-        var box = $('#resultados');
-        if (box) box.innerHTML = resultadosHTML();
-        var nb = document.querySelector('[data-tab-resumen="' + state.tabResumen + '"]');
-        if (nb) nb.focus({ preventScroll: true });
-        return;
-      }
       if (t.hasAttribute('data-cand')) {
         state.cand = t.getAttribute('data-cand');
         state.vista = 'candidatos';

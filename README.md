@@ -25,8 +25,10 @@ cultura y requisitos eliminatorios) se cambia en vivo y todo se recalcula.
 ## Cómo usarla
 
 1. Abre la demo o el `index.html` del proyecto.
-2. Cambia el contexto en el panel **Contexto de la empresa**.
-3. Revisa los cuatro veredictos y el ranking.
+2. Cambia el contexto en la línea **Contexto**, debajo de la recomendación
+   (se abre con “Cambiar”).
+3. Revisa la recomendación y las tres señales. El ranking y el detalle están en
+   Candidatos y en Puestos.
 4. Para tus propios datos: **Datos → Exportar JSON**, edita el archivo y
    **Datos → Cargar JSON**.
 

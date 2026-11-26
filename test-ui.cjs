@@ -92,15 +92,13 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   informe.titulo = await evaluate('document.title');
   informe.empresa = await evaluate("document.getElementById('topEmpresa').textContent");
   informe.nav = await evaluate("document.querySelectorAll('#nav [data-nav], #navSub [data-nav]').length");
-  informe.rank = await evaluate("document.querySelectorAll('.rank-row').length");
-  informe.crit = await evaluate("document.querySelectorAll('.crit-row').length");
-  informe.decisiones = await evaluate("document.querySelectorAll('.decision').length");
-  informe.tabs = await evaluate("document.querySelectorAll('[data-tab-resumen]').length");
+  informe.signals = await evaluate("document.querySelectorAll('.signal').length");
+  informe.why = await evaluate("document.querySelectorAll('.why-line').length");
 
   await capturar('01-resumen-top');
-  await capturarEn('02-resumen-decisiones', '.decisions');
-  await capturarEn('03-resumen-tabs', '.tabs-seg');
-  await capturarEn('04-resumen-ranking', '.rank');
+  await capturarEn('02-resumen-porque', '.why-line');
+  await capturarEn('03-resumen-senales', '.signals');
+  await capturarEn('04-resumen-siguiente', '.next-step');
 
   const vistas = ['puestos', 'candidatos', 'matriz', 'datos', 'metodo'];
   for (let i = 0; i < vistas.length; i++) {
@@ -118,8 +116,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await wait(500);
   informe.dolor = await evaluate("document.querySelector('#brief select').value");
   informe.trasCambio = await evaluate("document.querySelector('.page-head h1').textContent");
-  informe.criticaTrasCambio = await evaluate("document.querySelectorAll('.decision')[1].querySelector('.d-name').textContent");
-  await capturarEn('10-resumen-creatividad', '.decisions');
+  informe.criticaTrasCambio = await evaluate("document.querySelectorAll('.signal')[0].querySelector('.s-name').textContent");
+  await capturarEn('10-resumen-creatividad', '.why-line');
 
   await evaluate("document.querySelector('[data-tema]').click()");
   await wait(400);
@@ -168,8 +166,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   informe.genericoOk = await evaluate("!!document.querySelector('.ok-msg')");
   await evaluate("document.querySelector('[data-nav=\"resumen\"]').click()");
   await wait(500);
-  informe.genericoRank = await evaluate("document.querySelectorAll('.rank-row').length");
-  informe.genericoRadar = await evaluate("document.querySelectorAll('svg.radar').length");
+  informe.genericoSignals = await evaluate("document.querySelectorAll('.signal').length");
   informe.genericoVacios = await evaluate("document.querySelectorAll('.empty').length");
   await capturar('14-generico');
 
